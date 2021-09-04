@@ -48,6 +48,7 @@ keep if muestra_dig ==1
 tab total
 encode treatment_bl, g(treatment_el)
 gen treatment_el_1=(treatment_el==2)
+gen control = (treatment_el_1==0)
 
 save "$data/digitagro_clean", replace 
 
@@ -274,6 +275,6 @@ tab inst_2c, gen(inst_2c_)
 tab attitud_3_a, gen(attitud_3_a_) 
 tab attitud_3_b, gen(attitud_3_b_)
 
-******* Module H11_A - take_up *************************
+******* Module H13 - life conditions *************************
 
-
+tab life_cond_2a, gen(life_cond_2a_)
