@@ -1,7 +1,7 @@
 /*==================================================
 project:       
 Author:        Angela Lopez 
-E-email:       ar.lopez@uniandes.edu.co
+E-email:       ar.lopez@uniandes.edu.co/alopezsanchez@worldbank.org
 url:           
 Dependencies:  
 ----------------------------------------------------
@@ -25,7 +25,7 @@ global clean	"${path}\07 4 Clean Data"
 global output	"${path}\07 3 Docs\Digitagro - balance tables"
 global baseline "C:\Users\ALOP\Inter-American Development Bank Group\Angela - General\WB\GTM - IE DIGITAGRO\06 Baseline\06 4 Clean Data" 
 
-use "${data}/gua_digitagro_el_09082021.dta", clear
+use "${data}/gua_digitagro_el_raw_no_pii.dta", clear
 
 
 /*==================================================
@@ -68,6 +68,7 @@ replace infor_17b=. if infor_17b==-8
 joinby caseid using "$baseline\datos_limpios", unmatched(master) update 
 save "$data/digitagro_clean", replace 
 
+merge m:m caseid using "$baseline\strata.dta"
 
 *** household characteristics
 	g n_members 	= home_2 // household members
@@ -85,10 +86,25 @@ save "$data/digitagro_clean", replace
 *** education 
 	* women
 	tab home_12, generate(educa_wmen)
+	g e_ninguno = inlist(home_12,1,2,3)
+	g e_primaria = inlist(home_12,4,5,6,7)
+	g e_secundaria = inlist(home_12,8)
+	g e_terciaria = inlist(home_12,9,10,11)
+	
 	* partner 
 	tab home_16, generate(educa_men)
+	
+	g e_ninguno_p = inlist(home_16,1,2,3)
+	g e_primaria_p = inlist(home_16,4,5,6,7)
+	g e_secundaria_p = inlist(home_16,8)
+	g e_terciaria_p = inlist(home_16,9,10,11)
+	
+	
 *** marital status 
 	tab home_17, generate(marital)
+	g pareja = inlist(home_17,1,2)
+	g nopareja= inlist(home_17,3,4,5,6,7)
+	
 *** age  
 	g edad = edad_nacimiento
 	g edad2 = edad^2
@@ -106,8 +122,8 @@ save "$data/digitagro_clean", replace
 *** fertilizante
 	
 ******* Stratas *********************************
-* pending
-
+* pending - whatsapp top5% comunities 
+egen strata1=group(municipality)
 
 ******* Module H4 - HARVEST *************************
 
@@ -236,11 +252,6 @@ save "$data/digitagro_clean", replace
  replace yield_2_998 =0 if yield_2_cacao ==1
  
  
-  
- save "$data/digitagro_clean", replace
- 
-
- 
 ******* Module H6 - PAE *************************
 
 tab1 infor_*, nolabel
@@ -278,3 +289,5 @@ tab attitud_3_b, gen(attitud_3_b_)
 ******* Module H13 - life conditions *************************
 
 tab life_cond_2a, gen(life_cond_2a_)
+
+ save "$data/digitagro_clean", replace

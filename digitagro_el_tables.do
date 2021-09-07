@@ -1,7 +1,7 @@
 /*==================================================
 project:       
 Author:        Angela Lopez 
-E-email:       ar.lopez@uniandes.edu.co
+E-email:       ar.lopez@uniandes.edu.co/alopezsanchez@worldbank.org
 url:           
 Dependencies:  
 ----------------------------------------------------
@@ -16,12 +16,29 @@ global path "C:\Users\ALOP\Inter-American Development Bank Group\Angela - Genera
 global path "C:\Users\ALOP\Inter-American Development Bank Group\Angela - General\WB\GTM - IE DIGITAGRO\07 Endline"
 global data 	"${path}\07 01 Data"
 
-use "${data}/gua_digitagro_el_09082021.dta", clear
+use "${data}/digitagro_clean", clear
+
+global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent head_other educa_wmen1 edad2 e_ninguno e_primaria e_secundaria e_terciaria pareja nopareja
+
 
 ******** Balance table ************************************
 ******* Module H3 - LAND *******************************
-
+* unconditional 
 iebaltab terreno_cuerdas land_owner, pt grpvar(treatment_el_1) save("$output\3.land_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+terreno_cuerdas 	"Mean of the length of land used by the household for agriculture (cuerdas)" @ ///
+land_owner	"Do you own any of the lands you cultivate? : Yes" @ ///
+) replace 
+
+* clustered - stratum 
+iebaltab terreno_cuerdas land_owner, pt grpvar(treatment_el_1) save("$output\3.land_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+terreno_cuerdas 	"Mean of the length of land used by the household for agriculture (cuerdas)" @ ///
+land_owner	"Do you own any of the lands you cultivate? : Yes" @ ///
+) replace 
+
+* clustered - stratum  + fixed effects - conditional 
+iebaltab terreno_cuerdas land_owner, pt grpvar(treatment_el_1) save("$output\3.land_table_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(strata1) cov($controls) covarmissok  ///
 rowlabels( ///
 terreno_cuerdas 	"Mean of the length of land used by the household for agriculture (cuerdas)" @ ///
 land_owner	"Do you own any of the lands you cultivate? : Yes" @ ///
@@ -30,7 +47,7 @@ land_owner	"Do you own any of the lands you cultivate? : Yes" @ ///
 
 ******** Balance table ************************************
 ******* Module H4 - HARVEST *******************************
- 
+ * unconditional 
 iebaltab yield_2_1 yield_2_6 yield_2_9 yield_2_13 yield_2_15 yield_2_16 yield_2_20 yield_2_21 yield_2_31 yield_2_34 yield_2_35 yield_2_37 yield_2_40 yield_2_42 yield_2_43 yield_2_44 yield_2_45 yield_2_46 yield_2_47 yield_2_48 yield_2_49 yield_2_50 yield_2_997 yield_2_998 yield_2_999 yield_2_1000 yield_3_1 yield_3_2 yield_3_3 yield_3_4 yield_3_5 yield_3_999 , pt grpvar(treatment_el_1) save("$output\4.harvest_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
 rowlabels( ///
 yield_2_1 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
@@ -69,11 +86,166 @@ yield_3_999	"  999. Other (Specify)" @ ///
  
 * pendientes  yield_2_51 yield_2_52 yield_2_53 yield_2_54 yield_2_55 yield_2_56 yield_2_57 yield_2_58 yield_2_59 yield_2_60 yield_2_61 yield_2_62 yield_2_63 yield_2_64 yield_2_994 yield_2_995 yield_2_996 yield_2_997 yield_2_998 yield_2_999 yield_2_1000
 *pendiente yield_4 / esperando aclaracion 
- 
+
+* clustered - stratum  
+iebaltab yield_2_1 yield_2_6 yield_2_9 yield_2_13 yield_2_15 yield_2_16 yield_2_20 yield_2_21 yield_2_31 yield_2_34 yield_2_35 yield_2_37 yield_2_40 yield_2_42 yield_2_43 yield_2_44 yield_2_45 yield_2_46 yield_2_47 yield_2_48 yield_2_49 yield_2_50 yield_2_997 yield_2_998 yield_2_999 yield_2_1000 yield_3_1 yield_3_2 yield_3_3 yield_3_4 yield_3_5 yield_3_999 , pt grpvar(treatment_el_1) save("$output\4.harvest_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+yield_2_1 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
+yield_2_6	"    6. Broccoli" @ ///
+yield_2_9	"    9. Onion" @ ///
+yield_2_13	"   13. Cilantro" @ ///
+yield_2_15	"   15. Spinach" @ ///
+yield_2_16	"   16. Black bean" @ /// 
+yield_2_20	"   20. Limes" @ ///
+yield_2_21	"   21. Corn" @ ///
+yield_2_31	"   31. Potato" @ ///
+yield_2_34	"   34. Plantain" @ ///
+yield_2_35	"   35. Cabbage" @ ///
+yield_2_37	"   37. Tomato" @ ///
+yield_2_40	"   40. Carrots" @ ///
+yield_2_42	"   42. Radish" @ ///
+yield_2_43	"   43. Cucumber" @ ///
+yield_2_44	"   44. Fava bean" @ ///
+yield_2_45	"   45. Cauliflower" @ ///
+yield_2_46	"   46. Chipilín" @ ///
+yield_2_47	"   47. Coffee" @ ///
+yield_2_48	"   48. Banana" @ ///
+yield_2_49	"   49. Beetroot" @ ///
+yield_2_50	"   50. Lettuce" @ ///
+yield_2_997	"  997. Other1" @ ///
+yield_2_998	"  998. Other2" @ ///
+yield_2_999	"  999. Other3" @ ///
+yield_2_1000 "1000. None" @ ///
+yield_3_1	"In June and July 2021, why didn't the household partake in a harvest?    1. It's not the season " @ ///
+yield_3_2	"    2. Lack of manpower" @ ///
+yield_3_3	"    3. There is no where to sell" @ ///
+yield_3_4	"    4. Dedicated to other work" @ ///
+yield_3_5	"    5. Low prices" @ ///
+yield_3_999	"  999. Other (Specify)" @ ///
+) replace 
+
+* clustered - stratum  + fixed effects - conditional 
+global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent head_other educa_wmen1 edad2 e_ninguno e_primaria e_secundaria e_terciaria pareja nopareja terreno_cuerdas land_owner
+
+iebaltab yield_2_1 yield_2_6 yield_2_9 yield_2_13 yield_2_15 yield_2_16 yield_2_20 yield_2_21 yield_2_31 yield_2_34 yield_2_35 yield_2_37 yield_2_40 yield_2_42 yield_2_43 yield_2_44 yield_2_45 yield_2_46 yield_2_47 yield_2_48 yield_2_49 yield_2_50 yield_2_997 yield_2_998 yield_2_999 yield_2_1000 yield_3_1 yield_3_2 yield_3_3 yield_3_4 yield_3_5 yield_3_999 , pt grpvar(treatment_el_1) save("$output\4.harvest_table_clus_c.xlsx") stdev vce(cluster stratum) fix(strata1) cov($controls) covarmissok  grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+yield_2_1 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
+yield_2_6	"    6. Broccoli" @ ///
+yield_2_9	"    9. Onion" @ ///
+yield_2_13	"   13. Cilantro" @ ///
+yield_2_15	"   15. Spinach" @ ///
+yield_2_16	"   16. Black bean" @ /// 
+yield_2_20	"   20. Limes" @ ///
+yield_2_21	"   21. Corn" @ ///
+yield_2_31	"   31. Potato" @ ///
+yield_2_34	"   34. Plantain" @ ///
+yield_2_35	"   35. Cabbage" @ ///
+yield_2_37	"   37. Tomato" @ ///
+yield_2_40	"   40. Carrots" @ ///
+yield_2_42	"   42. Radish" @ ///
+yield_2_43	"   43. Cucumber" @ ///
+yield_2_44	"   44. Fava bean" @ ///
+yield_2_45	"   45. Cauliflower" @ ///
+yield_2_46	"   46. Chipilín" @ ///
+yield_2_47	"   47. Coffee" @ ///
+yield_2_48	"   48. Banana" @ ///
+yield_2_49	"   49. Beetroot" @ ///
+yield_2_50	"   50. Lettuce" @ ///
+yield_2_997	"  997. Other1" @ ///
+yield_2_998	"  998. Other2" @ ///
+yield_2_999	"  999. Other3" @ ///
+yield_2_1000 "1000. None" @ ///
+yield_3_1	"In June and July 2021, why didn't the household partake in a harvest?    1. It's not the season " @ ///
+yield_3_2	"    2. Lack of manpower" @ ///
+yield_3_3	"    3. There is no where to sell" @ ///
+yield_3_4	"    4. Dedicated to other work" @ ///
+yield_3_5	"    5. Low prices" @ ///
+yield_3_999	"  999. Other (Specify)" @ ///
+) replace 
+
 ******* Balance table ***********************************
 ******* Module H5 - SALES *******************************
-
+ * unconditional 
 iebaltab comm_3_1 comm_3_2 comm_3_3 comm_3_4 comm_3_5 comm_3_6 comm_3_7 comm_3_999 comm_3_1000 comm_6a_1 comm_6a_2 comm_6a_3 comm_6a_4 comm_6b_1 comm_6b_2 comm_6b_3 comm_6b_4 comm_11_1 comm_11_2 comm_11_3 comm_11_4 comm_11_999 comm_12 comm_13a comm_13b_1 comm_13b_2 comm_13b_3 comm_13b_4 comm_13b_5 comm_13b_6 comm_13b_7 comm_13b_999 comm_13b_1000, pt grpvar(treatment_el_1) save("$output\5.sales_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+comm_3_1 	"In June and July 2021, to whom did the household sell its crops and / or animal products?: 		1. Coyote /Middlemen/Intermediary (no PAE)" @ ///
+comm_3_2	"	2. Assocition/ Cooperative" @ ///
+comm_3_3	"	3. Someone who sells to the school (PAE provider) " @ ///
+comm_3_4	"	4. Directly to the school" @ ///
+comm_3_5	"	5. Merchant / Warehouse keeper (Specify)" @ ///
+comm_3_6	"	6. Directly to the person (relatives, neighbors, etc.)" @ /// 
+comm_3_7	"	7. In the square / market / terminal" @ ///
+comm_3_999	"	999. Other (Specify)" @ ///
+comm_3_1000	"	1000. None" @ ///
+comm_6a_1	" 6a In the months of June and July 2021, who from your household decided on the crop that was sold?:	1. You " @ ///
+comm_6a_2	"		2. Husband " @ ///
+comm_6a_3	"		3. Other male member if the household " @ ///
+comm_6a_4	" 		4. Other female member of the household " @ ///
+comm_6b_1	" 6b In the months of June and July 2021, who from your household decided on the animal products or by-products that were sold? : 1. You " @ ///
+comm_6b_2	" 	 2. Husband " @ ///
+comm_6b_3	" 	 3. Other male member if the household " @ ///
+comm_6b_4	" 	 4. Other female member of the household " @ ///
+comm_11_1	"11. In June and July 2021, why didn't the household sell its crops or animal products? 1. Harvested for home consumption only" @ ///
+comm_11_2	"2. The price was not good" @ ///
+comm_11_3	"3. The harvest was spoiled" @ ///
+comm_11_4	"4. No encontró comprador" @ ///
+comm_11_999	"999. other (specify)" @ ///
+comm_12		"For the rest of this year, do you plan to sell crops? : Yes" @ ///
+comm_13a	"In June and July of this year, you? or did a member of your household talk with a buyer of crops or animal products to whom they did not sell? : Yes" @ ///
+comm_13b_1	"In June and July of this year, who did you talk to? 1. Coyote /Middlemen/Intermediary (no PAE) " @ ///
+comm_13b_2 " 2. Assocition/ Cooperative " @ ///
+comm_13b_3 " 3. Someone who sells to the school (PAE provider) " @ ///
+comm_13b_4 " 4. Directly to the school" @ ///
+comm_13b_5 " 5. Merchant / Warehouse keeper (Specify)" @ ///
+comm_13b_6 " 6. Directly to the person (relatives, neighbors, etc.)" @ ///
+comm_13b_7 " 7. In the square / market / terminal" @ ///
+comm_13b_999 " 999. other" @ ///
+comm_13b_1000 " 1000. none" @ ///
+) replace 
+
+
+* clustered - stratum  
+iebaltab comm_3_1 comm_3_2 comm_3_3 comm_3_4 comm_3_5 comm_3_6 comm_3_7 comm_3_999 comm_3_1000 comm_6a_1 comm_6a_2 comm_6a_3 comm_6a_4 comm_6b_1 comm_6b_2 comm_6b_3 comm_6b_4 comm_11_1 comm_11_2 comm_11_3 comm_11_4 comm_11_999 comm_12 comm_13a comm_13b_1 comm_13b_2 comm_13b_3 comm_13b_4 comm_13b_5 comm_13b_6 comm_13b_7 comm_13b_999 comm_13b_1000, pt grpvar(treatment_el_1) save("$output\5.sales_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total  totallabel(Overall) ///
+rowlabels( ///
+comm_3_1 	"In June and July 2021, to whom did the household sell its crops and / or animal products?: 		1. Coyote /Middlemen/Intermediary (no PAE)" @ ///
+comm_3_2	"	2. Assocition/ Cooperative" @ ///
+comm_3_3	"	3. Someone who sells to the school (PAE provider) " @ ///
+comm_3_4	"	4. Directly to the school" @ ///
+comm_3_5	"	5. Merchant / Warehouse keeper (Specify)" @ ///
+comm_3_6	"	6. Directly to the person (relatives, neighbors, etc.)" @ /// 
+comm_3_7	"	7. In the square / market / terminal" @ ///
+comm_3_999	"	999. Other (Specify)" @ ///
+comm_3_1000	"	1000. None" @ ///
+comm_6a_1	" 6a In the months of June and July 2021, who from your household decided on the crop that was sold?:	1. You " @ ///
+comm_6a_2	"		2. Husband " @ ///
+comm_6a_3	"		3. Other male member if the household " @ ///
+comm_6a_4	" 		4. Other female member of the household " @ ///
+comm_6b_1	" 6b In the months of June and July 2021, who from your household decided on the animal products or by-products that were sold? : 1. You " @ ///
+comm_6b_2	" 	 2. Husband " @ ///
+comm_6b_3	" 	 3. Other male member if the household " @ ///
+comm_6b_4	" 	 4. Other female member of the household " @ ///
+comm_11_1	"11. In June and July 2021, why didn't the household sell its crops or animal products? 1. Harvested for home consumption only" @ ///
+comm_11_2	"2. The price was not good" @ ///
+comm_11_3	"3. The harvest was spoiled" @ ///
+comm_11_4	"4. No encontró comprador" @ ///
+comm_11_999	"999. other (specify)" @ ///
+comm_12		"For the rest of this year, do you plan to sell crops? : Yes" @ ///
+comm_13a	"In June and July of this year, you? or did a member of your household talk with a buyer of crops or animal products to whom they did not sell? : Yes" @ ///
+comm_13b_1	"In June and July of this year, who did you talk to? 1. Coyote /Middlemen/Intermediary (no PAE) " @ ///
+comm_13b_2 " 2. Assocition/ Cooperative " @ ///
+comm_13b_3 " 3. Someone who sells to the school (PAE provider) " @ ///
+comm_13b_4 " 4. Directly to the school" @ ///
+comm_13b_5 " 5. Merchant / Warehouse keeper (Specify)" @ ///
+comm_13b_6 " 6. Directly to the person (relatives, neighbors, etc.)" @ ///
+comm_13b_7 " 7. In the square / market / terminal" @ ///
+comm_13b_999 " 999. other" @ ///
+comm_13b_1000 " 1000. none" @ ///
+) replace 
+
+
+* clustered - stratum  + fixed effects - conditional 
+
+iebaltab comm_3_1 comm_3_2 comm_3_3 comm_3_4 comm_3_5 comm_3_6 comm_3_7 comm_3_999 comm_3_1000 comm_6a_1 comm_6a_2 comm_6a_3 comm_6a_4 comm_6b_1 comm_6b_2 comm_6b_3 comm_6b_4 comm_11_1 comm_11_2 comm_11_3 comm_11_4 comm_11_999 comm_12 comm_13a comm_13b_1 comm_13b_2 comm_13b_3 comm_13b_4 comm_13b_5 comm_13b_6 comm_13b_7 comm_13b_999 comm_13b_1000, pt grpvar(treatment_el_1) save("$output\5.sales_table_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) cov($controls) covarmissok totallabel(Overall) ///
 rowlabels( ///
 comm_3_1 	"In June and July 2021, to whom did the household sell its crops and / or animal products?: 		1. Coyote /Middlemen/Intermediary (no PAE)" @ ///
 comm_3_2	"	2. Assocition/ Cooperative" @ ///
@@ -162,10 +334,140 @@ infor_17a	"17a.Crops sold to schools in the School Feeding Program must edible, 
 infor_17b 	"17b.Crops sold to schools in the School Feeding Program must have no sign of abuse or decay " ///
 ) replace 
 
+* clustered - stratum  
+
+iebaltab infor_2 infor_3_1 infor_3_2 infor_3_3 infor_3_4 infor_3_5 infor_3_6 infor_3_999 infor_4 infor_5a infor_5b infor_5c infor_5d infor_6 infor_7_1 infor_7_2 infor_7_3 infor_7_4 infor_7_5 infor_7_6 infor_7_7 infor_7_999 infor_8_1_1 infor_8_1_2 infor_8_1_3 infor_8_1_4 infor_8_1_5 infor_8_1_999 infor_9 infor_9a infor_9b_1 infor_9b_2 infor_9b_3 infor_9b_4 infor_9b_5 infor_9b_6 infor_9b_7 infor_9b_999 infor_12 infor_13 infor_14 infor_15 infor_17a infor_17b if muestra_1==1 , pt grpvar(treatment_el_1) save("$output\6.PAE_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+infor_2 "2. % woman with knowledge about the existence of the School Feeding Program (SFP)" @ ///
+infor_3_1	"3. SFP information source: Ministry of Agriculture, Livestock and Food (MAGA)" @ ///
+infor_3_2	"3. SFP information source: Ministry of Educcation (MINEDUC) campaign" @ ///
+infor_3_3	"3. SFP information source: Another farmer" @ ///
+infor_3_4	"3. SFP information source: School/ Teacher/ OPF" @ ///
+infor_3_5	"3. SFP information source: Informative videos and SMSs" @ /// 
+infor_3_6	"3. SFP information source: Friends/ Relatives/ Neighbors" @ ///
+infor_3_999 "3. SFP information source: Other" @ ///
+infor_4 	"4. Household registered to sell crops to the SFP" @ ///
+infor_5a	"5a. knowledge that the SFP buys crops and / or animal products from local farmers" @ ///
+infor_5b	"5b. knowledge that someone in the household can register as a provider of the SFP" @ ///
+infor_5c	"5c. knowledge of the requirements to register as a provider of the SFP" @ ///
+infor_5d	"5d. think the process to register as a supplier is simple" @ ///
+infor_6 	"6. interested in registering" @ ///
+infor_7_1 	"7. Why would you not be interested in registering: Does not know / Doubts" @ ///
+infor_7_2	"7. Why would you not be interested in registering: Lack of time" @ ///
+infor_7_3 	"7. Why would you not be interested in registering: Little capital / resources / land / labor" @ ///
+infor_7_4 	"7. Why would you not be interested in registering: Produces little" @ ///
+infor_7_5 	"7. Why would you not be interested in registering: Does not have the products they ask for" @ ///
+infor_7_6 	"7. Why would you not be interested in registering: ND1" @ ///
+infor_7_7 	"7. Why would you not be interested in registering: ND2" @ ///
+infor_7_999 "7. Why would you not be interested in registering: Others" @ ///
+infor_8_1_1	"8. Expected benefits from participating in the PAE: To generate income" @ ///
+infor_8_1_2	"8. Expected benefits from participating in the PAE: They pay good prices" @ ///
+infor_8_1_3	"8. Expected benefits from participating in the PAE: Support the community and children" @ ///
+infor_8_1_4	"8. Expected benefits from participating in the PAE: Have a secure / fixed buyer" @ ///
+infor_8_1_5	"8. Expected benefits from participating in the PAE: Prices are stable" @ /// 
+infor_8_1_999 "8. Expected benefits from participating in the PAE: other" @ ///
+infor_9		"9. Households selling their products to an already registered supplier of the SFP" @ ///
+infor_9a	"9a Knowledge crops can be sold to suppliers already registered in the SFP" @ ///
+infor_9b_1	"9b1. reasons why the household didn't sell crops to a registered SFP provider: Does not know / Doubts " @ ///
+infor_9b_2	"9b2 reasons why the household didn't sell crops to a registered SFP provider: Lack of time" @ ///
+infor_9b_3	"9b3 reasons why the household didn't sell crops to a registered SFP provider: Little capital / resources / land / labor" @ ///
+infor_9b_4	"9b4 reasons why the household didn't sell crops to a registered SFP provider: Produces little" @ ///
+infor_9b_5	"9b5 reasons why the household didn't sell crops to a registered SFP provider: Does not have the products they ask for" @ ///
+infor_9b_6	"9b6 reasons why the household didn't sell crops to a registered SFP provider: Prices are not good" @ ///
+infor_9b_7	"9b7 reasons why the household didn't sell crops to a registered SFP provider: ND1" @ ///
+infor_9b_999 "9b999 reasons why the household didn't sell crops to a registered SFP provider: Other (Specify)" @ ///
+infor_12	"12. someone in the household plan to speak with a provider later" @ ///
+infor_13	"13. the household have a provider's phone number or contact information" @ ///
+infor_14	"14. knowledge about the crops that the schools buy from the SFP" @ ///
+infor_15	"15. have spoken with a specialist from MAGA" @ ///
+infor_17a	"17a.Crops sold to schools in the School Feeding Program must edible, even if they are a little mistreated or spoiled " @ ///
+infor_17b 	"17b.Crops sold to schools in the School Feeding Program must have no sign of abuse or decay " ///
+) replace 
+
+* clustered - stratum  + fixed effects - conditional 
+
+
+iebaltab infor_2 infor_3_1 infor_3_2 infor_3_3 infor_3_4 infor_3_5 infor_3_6 infor_3_999 infor_4 infor_5a infor_5b infor_5c infor_5d infor_6 infor_7_1 infor_7_2 infor_7_3 infor_7_4 infor_7_5 infor_7_6 infor_7_7 infor_7_999 infor_8_1_1 infor_8_1_2 infor_8_1_3 infor_8_1_4 infor_8_1_5 infor_8_1_999 infor_9 infor_9a infor_9b_1 infor_9b_2 infor_9b_3 infor_9b_4 infor_9b_5 infor_9b_6 infor_9b_7 infor_9b_999 infor_12 infor_13 infor_14 infor_15 infor_17a infor_17b if muestra_1==1 , pt grpvar(treatment_el_1) save("$output\6.PAE_table_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) cov($controls) covarmissok totallabel(Overall) ///
+rowlabels( ///
+infor_2 "2. % woman with knowledge about the existence of the School Feeding Program (SFP)" @ ///
+infor_3_1	"3. SFP information source: Ministry of Agriculture, Livestock and Food (MAGA)" @ ///
+infor_3_2	"3. SFP information source: Ministry of Educcation (MINEDUC) campaign" @ ///
+infor_3_3	"3. SFP information source: Another farmer" @ ///
+infor_3_4	"3. SFP information source: School/ Teacher/ OPF" @ ///
+infor_3_5	"3. SFP information source: Informative videos and SMSs" @ /// 
+infor_3_6	"3. SFP information source: Friends/ Relatives/ Neighbors" @ ///
+infor_3_999 "3. SFP information source: Other" @ ///
+infor_4 	"4. Household registered to sell crops to the SFP" @ ///
+infor_5a	"5a. knowledge that the SFP buys crops and / or animal products from local farmers" @ ///
+infor_5b	"5b. knowledge that someone in the household can register as a provider of the SFP" @ ///
+infor_5c	"5c. knowledge of the requirements to register as a provider of the SFP" @ ///
+infor_5d	"5d. think the process to register as a supplier is simple" @ ///
+infor_6 	"6. interested in registering" @ ///
+infor_7_1 	"7. Why would you not be interested in registering: Does not know / Doubts" @ ///
+infor_7_2	"7. Why would you not be interested in registering: Lack of time" @ ///
+infor_7_3 	"7. Why would you not be interested in registering: Little capital / resources / land / labor" @ ///
+infor_7_4 	"7. Why would you not be interested in registering: Produces little" @ ///
+infor_7_5 	"7. Why would you not be interested in registering: Does not have the products they ask for" @ ///
+infor_7_6 	"7. Why would you not be interested in registering: ND1" @ ///
+infor_7_7 	"7. Why would you not be interested in registering: ND2" @ ///
+infor_7_999 "7. Why would you not be interested in registering: Others" @ ///
+infor_8_1_1	"8. Expected benefits from participating in the PAE: To generate income" @ ///
+infor_8_1_2	"8. Expected benefits from participating in the PAE: They pay good prices" @ ///
+infor_8_1_3	"8. Expected benefits from participating in the PAE: Support the community and children" @ ///
+infor_8_1_4	"8. Expected benefits from participating in the PAE: Have a secure / fixed buyer" @ ///
+infor_8_1_5	"8. Expected benefits from participating in the PAE: Prices are stable" @ /// 
+infor_8_1_999 "8. Expected benefits from participating in the PAE: other" @ ///
+infor_9		"9. Households selling their products to an already registered supplier of the SFP" @ ///
+infor_9a	"9a Knowledge crops can be sold to suppliers already registered in the SFP" @ ///
+infor_9b_1	"9b1. reasons why the household didn't sell crops to a registered SFP provider: Does not know / Doubts " @ ///
+infor_9b_2	"9b2 reasons why the household didn't sell crops to a registered SFP provider: Lack of time" @ ///
+infor_9b_3	"9b3 reasons why the household didn't sell crops to a registered SFP provider: Little capital / resources / land / labor" @ ///
+infor_9b_4	"9b4 reasons why the household didn't sell crops to a registered SFP provider: Produces little" @ ///
+infor_9b_5	"9b5 reasons why the household didn't sell crops to a registered SFP provider: Does not have the products they ask for" @ ///
+infor_9b_6	"9b6 reasons why the household didn't sell crops to a registered SFP provider: Prices are not good" @ ///
+infor_9b_7	"9b7 reasons why the household didn't sell crops to a registered SFP provider: ND1" @ ///
+infor_9b_999 "9b999 reasons why the household didn't sell crops to a registered SFP provider: Other (Specify)" @ ///
+infor_12	"12. someone in the household plan to speak with a provider later" @ ///
+infor_13	"13. the household have a provider's phone number or contact information" @ ///
+infor_14	"14. knowledge about the crops that the schools buy from the SFP" @ ///
+infor_15	"15. have spoken with a specialist from MAGA" @ ///
+infor_17a	"17a.Crops sold to schools in the School Feeding Program must edible, even if they are a little mistreated or spoiled " @ ///
+infor_17b 	"17b.Crops sold to schools in the School Feeding Program must have no sign of abuse or decay " ///
+) replace 
+
 ******* Balance table ********************************************
 ******* Module H7 - Agro practices *******************************
  
-iebaltab mark_2_1 mark_2_2 mark_2_3 mark_2_4 mark_6_1 mark_6_2 mark_6_3 mark_6_4 mark_6_5, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+iebaltab mark_2_1 mark_2_2 mark_2_3 mark_2_4 mark_6_1 mark_6_2 mark_6_3 mark_6_4 mark_6_5, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total  totallabel(Overall) ///
+rowlabels( ///
+mark_2_1 	"In June and July this year, you stored the harvested in    1. In dry and clean places" @ ///
+mark_2_2	"		2. In clean and humid places " @ ///
+mark_2_3	"		3. In other places (Specify) " @ ///
+mark_2_4	"		4. I don't know " @ ///
+mark_6_1	"In the last two months, what material did the household use to pack the eggs for sale?		1. Cardboard " @ ///
+mark_6_2	"		2. Box " @ ///
+mark_6_3	"		3. Baskets " @ ///
+mark_6_4	"		4. Bags " @ ///
+mark_6_5	"	  999. Other (Specify) " @ ///
+) replace 
+ 
+* clustered - stratum 
+ 
+iebaltab mark_2_1 mark_2_2 mark_2_3 mark_2_4 mark_6_1 mark_6_2 mark_6_3 mark_6_4 mark_6_5, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total  covarmissok totallabel(Overall) ///
+rowlabels( ///
+mark_2_1 	"In June and July this year, you stored the harvested in    1. In dry and clean places" @ ///
+mark_2_2	"		2. In clean and humid places " @ ///
+mark_2_3	"		3. In other places (Specify) " @ ///
+mark_2_4	"		4. I don't know " @ ///
+mark_6_1	"In the last two months, what material did the household use to pack the eggs for sale?		1. Cardboard " @ ///
+mark_6_2	"		2. Box " @ ///
+mark_6_3	"		3. Baskets " @ ///
+mark_6_4	"		4. Bags " @ ///
+mark_6_5	"	  999. Other (Specify) " @ ///
+) replace 
+ 
+* clustered - stratum  + fixed effects - conditional 
+ iebaltab mark_2_1 mark_2_2 mark_2_3 mark_2_4 mark_6_1 mark_6_2 mark_6_3 mark_6_4 mark_6_5, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) cov($controls) covarmissok totallabel(Overall) ///
 rowlabels( ///
 mark_2_1 	"In June and July this year, you stored the harvested in    1. In dry and clean places" @ ///
 mark_2_2	"		2. In clean and humid places " @ ///
@@ -183,12 +485,30 @@ mark_6_5	"	  999. Other (Specify) " @ ///
 ******* Balance table ********************************************
 ******* Module H8 - marketing ************************************
 
-iebaltab taxin invoice invoice_interest, pt grpvar(treatment_el_1) save("$output\8.marketing_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+	
+iebaltab taxin invoice invoice_interest, pt grpvar(treatment_el_1) save("$output\8.marketing_table_.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
 rowlabels( ///
 taxin	"Does anyone in the household have a Tax Identification Number (TIN)?....1. Yes " @ ///
 invoice	"Can someone from the household issue invoices?.... 1. Yes " @ ///
 invoice_interest	"Are you interested in getting an invoice?.... 1. Yes " @ ///
 ) replace 
+
+* clustered - stratum  
+iebaltab taxin invoice invoice_interest, pt grpvar(treatment_el_1) save("$output\8.marketing_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+taxin	"Does anyone in the household have a Tax Identification Number (TIN)?....1. Yes " @ ///
+invoice	"Can someone from the household issue invoices?.... 1. Yes " @ ///
+invoice_interest	"Are you interested in getting an invoice?.... 1. Yes " @ ///
+) replace 
+
+* clustered - stratum  + fixed effects - conditional 
+iebaltab taxin invoice invoice_interest, pt grpvar(treatment_el_1) save("$output\8.marketing_table_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) cov($controls) covarmissok totallabel(Overall) ///
+rowlabels( ///
+taxin	"Does anyone in the household have a Tax Identification Number (TIN)?....1. Yes " @ ///
+invoice	"Can someone from the household issue invoices?.... 1. Yes " @ ///
+invoice_interest	"Are you interested in getting an invoice?.... 1. Yes " @ ///
+) replace 
+
 
 
 ******* Balance table ********************************************
@@ -213,6 +533,50 @@ inst_2c_5	"		4. None " @ ///
 inst_2c_1	"		5. I don't know/ No response " @ ///
 ) replace 
 
+* clustered - stratum 
+
+iebaltab inst_2a_2 inst_2a_3 inst_2a_4 inst_2a_5 inst_2a_1 inst_2b_2 inst_2b_3 inst_2b_4 inst_2b_5 inst_2b_1  inst_2c_2 inst_2c_3 inst_2c_4 inst_2c_5 inst_2c_1, pt grpvar(treatment_el_1) save("$output\10.perception_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+inst_2a_2	"Currently, how much confidence do you have in Minitry of Agriculture (MAGA)....1. Very much " @ ///
+inst_2a_3	"		2. Somewhat " @ ///
+inst_2a_4	"		3. Little " @ ///
+inst_2a_5	"		4. None " @ ///
+inst_2a_1	"		5. I don't know/ No response " @ ///
+inst_2b_2	"Currently, how much confidence do you have in Ministry of Education (MINEDUC)....1. Very much " @ ///
+inst_2b_3	"		2. Somewhat " @ ///
+inst_2b_4	"		3. Little " @ ///
+inst_2b_5	"		4. None " @ ///
+inst_2b_1	"		5. I don't know/ No response " @ ///
+inst_2c_2	"Currently, how much confidence do you have in Superintendence of Tax Administration (SAT)....1. Very much " @ ///
+inst_2c_3	"		2. Somewhat " @ ///
+inst_2c_4	"		3. Little " @ ///
+inst_2c_5	"		4. None " @ ///
+inst_2c_1	"		5. I don't know/ No response " @ ///
+) replace 
+
+* clustered - stratum  + fixed effects - conditional 
+
+iebaltab inst_2a_2 inst_2a_3 inst_2a_4 inst_2a_5 inst_2a_1 inst_2b_2 inst_2b_3 inst_2b_4 inst_2b_5 inst_2b_1  inst_2c_2 inst_2c_3 inst_2c_4 inst_2c_5 inst_2c_1, pt grpvar(treatment_el_1) save("$output\10.perception_table_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) cov($controls) covarmissok totallabel(Overall) ///
+rowlabels( ///
+inst_2a_2	"Currently, how much confidence do you have in Minitry of Agriculture (MAGA)....1. Very much " @ ///
+inst_2a_3	"		2. Somewhat " @ ///
+inst_2a_4	"		3. Little " @ ///
+inst_2a_5	"		4. None " @ ///
+inst_2a_1	"		5. I don't know/ No response " @ ///
+inst_2b_2	"Currently, how much confidence do you have in Ministry of Education (MINEDUC)....1. Very much " @ ///
+inst_2b_3	"		2. Somewhat " @ ///
+inst_2b_4	"		3. Little " @ ///
+inst_2b_5	"		4. None " @ ///
+inst_2b_1	"		5. I don't know/ No response " @ ///
+inst_2c_2	"Currently, how much confidence do you have in Superintendence of Tax Administration (SAT)....1. Very much " @ ///
+inst_2c_3	"		2. Somewhat " @ ///
+inst_2c_4	"		3. Little " @ ///
+inst_2c_5	"		4. None " @ ///
+inst_2c_1	"		5. I don't know/ No response " @ ///
+) replace 
+
+
+
 
 ******* Balance table ********************************************
 ******* Module H11 - attitudes *********************************** 
@@ -220,7 +584,35 @@ inst_2c_1	"		5. I don't know/ No response " @ ///
 
 iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
 rowlabels( ///
-attitud_3_a_2	"a. How much do you agree or disagree with the following statements?	1. Disagree " @ ///
+attitud_3_a_2	"How much do you agree or disagree with the following statements? a.  While doing a difficult job, I am sure I can do it  1. Disagree" @ ///
+attitud_3_a_3	"		2. Agree nor disagree " @ ///
+attitud_3_a_4	"		3. Agree  " @ ///
+attitud_3_a_1	"		4. I don't know/ No response " @ ///
+attitud_3_b_2	"b. I believe that I can achieve most of the things that I set my mind to....1. Disagree " @ ///
+attitud_3_b_3	"		2. Agree nor disagree " @ ///
+attitud_3_b_4	"		3. Agree " @ ///
+attitud_3_b_1	"		4. I don't know/ No response " @ ///
+) replace 
+
+* clustered - stratum 
+
+iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(stratum) totallabel(Overall) ///
+rowlabels( ///
+attitud_3_a_2	"How much do you agree or disagree with the following statements? a.  While doing a difficult job, I am sure I can do it  1. Disagree" @ ///
+attitud_3_a_3	"		2. Agree nor disagree " @ ///
+attitud_3_a_4	"		3. Agree  " @ ///
+attitud_3_a_1	"		4. I don't know/ No response " @ ///
+attitud_3_b_2	"b. I believe that I can achieve most of the things that I set my mind to....1. Disagree " @ ///
+attitud_3_b_3	"		2. Agree nor disagree " @ ///
+attitud_3_b_4	"		3. Agree " @ ///
+attitud_3_b_1	"		4. I don't know/ No response " @ ///
+) replace 
+
+* clustered - stratum  + fixed effects - conditional 
+
+iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) cov($controls) covarmissok totallabel(Overall) ///
+rowlabels( ///
+attitud_3_a_2	"How much do you agree or disagree with the following statements? a.  While doing a difficult job, I am sure I can do it  1. Disagree" @ ///
 attitud_3_a_3	"		2. Agree nor disagree " @ ///
 attitud_3_a_4	"		3. Agree  " @ ///
 attitud_3_a_1	"		4. I don't know/ No response " @ ///
@@ -265,7 +657,148 @@ life_cond_2a_11	"11. Low sale price " @ ///
 life_cond_2a_12	"	999. Other  " @ ///
 ) replace  
  
+* clustered - stratum 
  
+iebaltab life_cond_2_1 life_cond_2_2 life_cond_2_3 life_cond_2_4 life_cond_2_5 life_cond_2_6 life_cond_2_7 life_cond_2_8 life_cond_2_9 life_cond_2_10 life_cond_2_11 life_cond_2_999 life_cond_2_1000 life_cond_2a_1 life_cond_2a_2 life_cond_2a_3 life_cond_2a_4 life_cond_2a_5 life_cond_2a_6 life_cond_2a_7 life_cond_2a_8 life_cond_2a_9 life_cond_2a_10 life_cond_2a_11 life_cond_2a_12, pt grpvar(treatment_el_1) save("$output\13.life_conditions_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+life_cond_2_1	"What are the main problems that the household faces when selling its crops?  1. Could not get inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2_2	"2. Increase in the price of inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2_3	"3. Lack of staff " @ ///
+life_cond_2_4	"4. Could not find where to sell your products" @ ///
+life_cond_2_5	"5. Lack of financing " @ ///
+life_cond_2_6	"6. Competition from imported products " @ ///
+life_cond_2_7	"7. Social conflicts " @ ///
+life_cond_2_8	"8. Lack of water for agriculture " @ ///
+life_cond_2_9	"9. Problems transporting the harvest " @ ///
+life_cond_2_10	"10. Crop damage from pests, diseases, and handling" @ ///
+life_cond_2_11	"11. Low sale price " @ ///
+life_cond_2_999	"999. Other (Specify) " @ ///
+life_cond_2_1000	"	1000. None " @ ///
+life_cond_2a_1	"Of all the problems, which was the main one?	1.Could not get inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2a_2	"2. Increase in the price of inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2a_3	"3. Lack of staff " @ ///
+life_cond_2a_4	"4. Could not find where to sell your products " @ ///Contact information for MAGA specialists
+life_cond_2a_5	"5. Lack of financing " @ ///
+life_cond_2a_6	"6. Competition from imported products  " @ ///
+life_cond_2a_7	"7. Social conflicts " @ ///
+life_cond_2a_8	"8. Lack of water for agriculture" @ ///
+life_cond_2a_9	"9. Problems transporting the harvest" @ ///
+life_cond_2a_10	"10. Crop damage from pests, diseases, and handling" @ ///Contact information for MAGA specialists
+life_cond_2a_11	"11. Low sale price " @ ///
+life_cond_2a_12	"	999. Other  " @ ///
+) replace   
+ 
+* clustered - stratum  + fixed effects - conditional  
+ 
+iebaltab life_cond_2_1 life_cond_2_2 life_cond_2_3 life_cond_2_4 life_cond_2_5 life_cond_2_6 life_cond_2_7 life_cond_2_8 life_cond_2_9 life_cond_2_10 life_cond_2_11 life_cond_2_999 life_cond_2_1000 life_cond_2a_1 life_cond_2a_2 life_cond_2a_3 life_cond_2a_4 life_cond_2a_5 life_cond_2a_6 life_cond_2a_7 life_cond_2a_8 life_cond_2a_9 life_cond_2a_10 life_cond_2a_11 life_cond_2a_12, pt grpvar(treatment_el_1) save("$output\13.life_conditions_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) cov($controls) covarmissok totallabel(Overall) ///
+rowlabels( ///
+life_cond_2_1	"What are the main problems that the household faces when selling its crops?  1. Could not get inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2_2	"2. Increase in the price of inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2_3	"3. Lack of staff " @ ///
+life_cond_2_4	"4. Could not find where to sell your products" @ ///
+life_cond_2_5	"5. Lack of financing " @ ///
+life_cond_2_6	"6. Competition from imported products " @ ///
+life_cond_2_7	"7. Social conflicts " @ ///
+life_cond_2_8	"8. Lack of water for agriculture " @ ///
+life_cond_2_9	"9. Problems transporting the harvest " @ ///
+life_cond_2_10	"10. Crop damage from pests, diseases, and handling" @ ///
+life_cond_2_11	"11. Low sale price " @ ///
+life_cond_2_999	"999. Other (Specify) " @ ///
+life_cond_2_1000	"	1000. None " @ ///
+life_cond_2a_1	"Of all the problems, which was the main one?	1.Could not get inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2a_2	"2. Increase in the price of inputs (fertilizers, pesticides, seeds, etc.) " @ ///
+life_cond_2a_3	"3. Lack of staff " @ ///
+life_cond_2a_4	"4. Could not find where to sell your products " @ ///Contact information for MAGA specialists
+life_cond_2a_5	"5. Lack of financing " @ ///
+life_cond_2a_6	"6. Competition from imported products  " @ ///
+life_cond_2a_7	"7. Social conflicts " @ ///
+life_cond_2a_8	"8. Lack of water for agriculture" @ ///
+life_cond_2a_9	"9. Problems transporting the harvest" @ ///
+life_cond_2a_10	"10. Crop damage from pests, diseases, and handling" @ ///Contact information for MAGA specialists
+life_cond_2a_11	"11. Low sale price " @ ///
+life_cond_2a_12	"	999. Other  " @ ///
+) replace   
+
+
+******* Balance table ********************************************
+******* Module H14 - household ****************************** 
+ 
+ ** should be on the postfile tables 
+ 
+iebaltab n_members n_chidren adult_men adult_women adults_65 head_self head_parnter head_parent head_other e_ninguno e_primaria e_secundaria e_terciaria e_ninguno_p e_primaria_p e_secundaria_p e_terciaria_p pareja nopareja, pt grpvar(treatment_el_1) save("$output\14.household.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+n_members	"2. Including you, how many members make up your household?" @ ///
+n_chidren	"3. How many children under the age of 15 are in your household?" @ ///
+adult_men	"4. How many men between the ages of 15 and 64 are in your household?" @ ///
+adult_women	"5. Including you, how many women between the ages of 15 and 64 are in your household?" @ ///
+adults_65	"6. How many members are 65 years or older or over?" @ ///
+head_self		"11. Who is the head of the household in your household? - 1. Interviewee" @ ///
+head_parnter	"11. 2. Husband/Wife" @ ///
+head_parent		"11. 3. Other relative " @ ///
+head_other		"11. 4. Non relative " @ ///
+e_ninguno		"12. What is the highest level of education you passed?  1. None " @ ///
+e_primaria		"12. 2. Primary  " @ ///
+e_secundaria	"12. 3. Secondary " @ ///
+e_terciaria		"12. 4/. Tertiary " @ ///
+e_ninguno_p		"16. What is the highest level of education your partner passed? 1.None" @ ///
+e_primaria_p	"16. 2. Primary " @ ///
+e_secundaria_p	"16. 3. Secondary " @ ///
+e_terciaria_p	"16. 4. Tertiary" @ ///
+pareja			"What is your current marital status? 1. Civil union, Married "  @ ///
+nopareja		"2. Marital separation, separated, divorced, widowed, single" @ ///
+) replace  
+ 
+* clustered - stratum  
+ 
+iebaltab n_members n_chidren adult_men adult_women adults_65 head_self head_parnter head_parent head_other e_ninguno e_primaria e_secundaria e_terciaria e_ninguno_p e_primaria_p e_secundaria_p e_terciaria_p pareja nopareja, pt grpvar(treatment_el_1) save("$output\14.household_clus.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) ///
+rowlabels( ///
+n_members	"2. Including you, how many members make up your household?" @ ///
+n_chidren	"3. How many children under the age of 15 are in your household?" @ ///
+adult_men	"4. How many men between the ages of 15 and 64 are in your household?" @ ///
+adult_women	"5. Including you, how many women between the ages of 15 and 64 are in your household?" @ ///
+adults_65	"6. How many members are 65 years or older or over?" @ ///
+head_self		"11. Who is the head of the household in your household? - 1. Interviewee" @ ///
+head_parnter	"11. 2. Husband/Wife" @ ///
+head_parent		"11. 3. Other relative " @ ///
+head_other		"11. 4. Non relative " @ ///
+e_ninguno		"12. What is the highest level of education you passed?  1. None " @ ///
+e_primaria		"12. 2. Primary  " @ ///
+e_secundaria	"12. 3. Secondary " @ ///
+e_terciaria		"12. 4/. Tertiary " @ ///
+e_ninguno_p		"16. What is the highest level of education your partner passed? 1.None" @ ///
+e_primaria_p	"16. 2. Primary " @ ///
+e_secundaria_p	"16. 3. Secondary " @ ///
+e_terciaria_p	"16. 4. Tertiary" @ ///
+pareja			"What is your current marital status? 1. Civil union, Married "  @ ///
+nopareja		"2. Marital separation, separated, divorced, widowed, single" @ ///
+) replace  
+
+* clustered - stratum  + fixed effects - conditional 
+
+iebaltab n_members n_chidren adult_men adult_women adults_65 head_self head_parnter head_parent head_other e_ninguno e_primaria e_secundaria e_terciaria e_ninguno_p e_primaria_p e_secundaria_p e_terciaria_p pareja nopareja, pt grpvar(treatment_el_1) save("$output\14.household_clus_c.xlsx") stdev vce(cluster stratum) grplabels("1 Treatment @ 0 Control") total fix(strata1) totallabel(Overall) ///
+rowlabels( ///
+n_members	"2. Including you, how many members make up your household?" @ ///
+n_chidren	"3. How many children under the age of 15 are in your household?" @ ///
+adult_men	"4. How many men between the ages of 15 and 64 are in your household?" @ ///
+adult_women	"5. Including you, how many women between the ages of 15 and 64 are in your household?" @ ///
+adults_65	"6. How many members are 65 years or older or over?" @ ///
+head_self		"11. Who is the head of the household in your household? - 1. Interviewee" @ ///
+head_parnter	"11. 2. Husband/Wife" @ ///
+head_parent		"11. 3. Other relative " @ ///
+head_other		"11. 4. Non relative " @ ///
+e_ninguno		"12. What is the highest level of education you passed?  1. None " @ ///
+e_primaria		"12. 2. Primary  " @ ///
+e_secundaria	"12. 3. Secondary " @ ///
+e_terciaria		"12. 4/. Tertiary " @ ///
+e_ninguno_p		"16. What is the highest level of education your partner passed? 1.None" @ ///
+e_primaria_p	"16. 2. Primary " @ ///
+e_secundaria_p	"16. 3. Secondary " @ ///
+e_terciaria_p	"16. 4. Tertiary" @ ///
+pareja			"What is your current marital status? 1. Civil union, Married "  @ ///
+nopareja		"2. Marital separation, separated, divorced, widowed, single" @ ///
+) replace  
+
+
 *======================================================================
 *	balance tables : take-up
 *======================================================================
@@ -386,7 +919,8 @@ preserve
 	postfile `ptablas' str25(Indicador Module tipo_control tipo_valor value)   using `tablas', replace
 		
 	*Total
-	* 1. no controls 
+ global controls1 n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent head_other educa_wmen1 edad2 e_ninguno e_primaria e_secundaria e_terciaria pareja nopareja
+	
 * Land 
 	local indicadores terreno_cuerdas land_owner  
 			foreach indicador of local indicadores {
@@ -397,9 +931,29 @@ preserve
 				
 				post `ptablas' ("`indicador'") ("Land") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Land") ("sin controles") ("se") ("[`se']")
-	
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("Land") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("Land") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls1 i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("Land") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("Land") ("con controles, cluster") ("se") ("[`se']")
+							
 			}
+			
+		
 * harvest 
+
+	global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent head_other educa_wmen1 edad2 e_ninguno e_primaria e_secundaria e_terciaria pareja nopareja terreno_cuerdas land_owner
 
 	local indicadores yield_2_1 yield_2_6 yield_2_9 yield_2_13 yield_2_15 yield_2_16 yield_2_20 yield_2_21 yield_2_31 yield_2_34 yield_2_35 yield_2_37 yield_2_40 yield_2_42 yield_2_43 yield_2_44 yield_2_45 yield_2_46 yield_2_47 yield_2_48 yield_2_49 yield_2_50 yield_2_997 yield_2_998 yield_2_999 yield_2_1000 yield_3_1 yield_3_2 yield_3_3 yield_3_4 yield_3_5 yield_3_999
 
@@ -411,6 +965,22 @@ preserve
 				
 				post `ptablas' ("`indicador'") ("Harvest") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Harvest") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("Harvest") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("Harvest") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("Harvest") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("Harvest") ("con controles, cluster") ("se") ("[`se']")
 	
 			}
 			
@@ -425,6 +995,22 @@ preserve
 				
 				post `ptablas' ("`indicador'") ("PAE") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("PAE") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("PAE") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("PAE") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("PAE") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("PAE") ("con controles, cluster") ("se") ("[`se']")				
 	
 			}
 *sales 			
@@ -437,6 +1023,22 @@ local indicadores comm_3_1 comm_3_2 comm_3_3 comm_3_4 comm_3_5 comm_3_6 comm_3_7
 			
 				post `ptablas' ("`indicador'") ("SALES") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("SALES") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("SALES") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("SALES") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("SALES") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("SALES") ("con controles, cluster") ("se") ("[`se']")
 	
 			}		
 
@@ -451,6 +1053,22 @@ local indicadores mark_2_1 mark_2_2 mark_2_3 mark_2_4 mark_6_1 mark_6_2 mark_6_3
 			
 				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("agro_practices") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("agro_practices") ("con controles, cluster") ("se") ("[`se']")
 	
 			}		
 			
@@ -465,6 +1083,22 @@ local indicadores taxin invoice invoice_interest
 			
 				post `ptablas' ("`indicador'") ("marketing") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("marketing") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("marketing") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("marketing") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("marketing") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("marketing") ("con controles, cluster") ("se") ("[`se']")
 	
 			}	
 * perception 	
@@ -479,6 +1113,22 @@ local indicadores inst_2a_2 inst_2a_3 inst_2a_4 inst_2a_5 inst_2a_1 inst_2b_2 in
 			
 				post `ptablas' ("`indicador'") ("perception") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("perception") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("perception") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("perception") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("perception") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("perception") ("con controles, cluster") ("se") ("[`se']")
 	
 			}	
 
@@ -493,8 +1143,84 @@ local indicadores attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitu
 			
 				post `ptablas' ("`indicador'") ("attitudes") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("attitudes") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("attitudes") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("attitudes") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("attitudes") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("attitudes") ("con controles, cluster") ("se") ("[`se']")
 	
 			}	
+			
+*life conditions
+local indicadores life_cond_2_1 life_cond_2_2 life_cond_2_3 life_cond_2_4 life_cond_2_5 life_cond_2_6 life_cond_2_7 life_cond_2_8 life_cond_2_9 life_cond_2_10 life_cond_2_11 life_cond_2_999 life_cond_2_1000 life_cond_2a_1 life_cond_2a_2 life_cond_2a_3 life_cond_2a_4 life_cond_2a_5 life_cond_2a_6 life_cond_2a_7 life_cond_2a_8 life_cond_2a_9 life_cond_2a_10 life_cond_2a_11 life_cond_2a_12
+
+			foreach indicador of local indicadores {
+				reg `indicador' treatment_el_1 
+			
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+			
+				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 $controls i.strata1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("life_conditions") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("life_conditions") ("con controles, cluster") ("se") ("[`se']")
+	
+			}	
+		
+* household 
+local indicadores n_members n_chidren adult_men adult_women adults_65 head_self head_parnter head_parent head_other e_ninguno e_primaria e_secundaria e_terciaria e_ninguno_p e_primaria_p e_secundaria_p e_terciaria_p pareja nopareja
+
+			foreach indicador of local indicadores {
+				reg `indicador' treatment_el_1 
+			
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+			
+				post `ptablas' ("`indicador'") ("household") ("sin controles") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("household") ("sin controles") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 , vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("household") ("sin controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("household") ("sin controles, cluster") ("se") ("[`se']")
+				
+				reg `indicador' treatment_el_1 i.strata1, vce(cluster stratum)
+				
+				local beta : di %6.4f _b[treatment_el_1]
+				local se: di %6.4f _se[treatment_el_1]
+				
+				post `ptablas' ("`indicador'") ("household") ("con controles, cluster") ("beta") ("`beta'") 
+				post `ptablas' ("`indicador'") ("household") ("con controles, cluster") ("se") ("[`se']")
+	
+			}		
 		
 postclose `ptablas'
 use `tablas', clear
