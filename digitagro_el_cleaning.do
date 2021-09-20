@@ -65,7 +65,8 @@ replace infor_17a=. if infor_17a==-8
 replace infor_17b=0 if infor_17b==2
 replace infor_17b=. if infor_17b==-8
 
-joinby caseid using "$baseline\datos_limpios", unmatched(master) update 
+joinby caseid using "$baseline\datos_limpios", unmatched(master) update
+drop _merge  
 save "$data/digitagro_clean", replace 
 
 merge m:m caseid using "$baseline\strata.dta"
@@ -111,6 +112,7 @@ merge m:m caseid using "$baseline\strata.dta"
 	
 *** hectarias de tierras - cuerdas
 	g terreno_cuerdas = farm_2
+	gen log_terreno_cuerdas = log(terreno_cuerdas)
 	replace terreno_cuerdas = . if farm_3 ==999
 	replace terreno_cuerdas = . if farm_2 ==-888
 	
@@ -120,6 +122,38 @@ merge m:m caseid using "$baseline\strata.dta"
 	replace land_owner = . if farm_4==3
 
 *** fertilizante
+	*agricultural practices
+	split mark_1, p(" ")
+	gen mark_11ns = real(mark_11)
+	replace mark_11ns=0 if mark_11ns==.
+	replace mark_11ns=7 if mark_11ns==1000
+	gen mark_12ns = real(mark_12)
+	replace mark_12ns=0 if mark_12ns==.
+	gen mark_13ns = real(mark_13)
+	replace mark_13ns=0 if mark_13ns==.
+	gen mark_14ns = real(mark_14)
+	replace mark_14ns=0 if mark_14ns==.
+	gen mark_15ns = real(mark_15)
+	replace mark_15ns=0 if mark_15ns==.
+	gen mark_16ns = real(mark_16)
+	replace mark_16ns=0 if mark_16ns==.
+	drop mark_11-mark_16 
+
+	forvalues i = 1(1)7 {
+	gen practice`i'=0
+	replace practice`i'=1 if (mark_11ns==`i'| mark_12ns==`i'| mark_13ns==`i'| mark_14ns==`i'| mark_15ns==`i'| mark_16ns==`i')
+	}
+	drop mark_11ns mark_12ns mark_13ns mark_14ns mark_15ns mark_16ns
+
+	gen p_abonos 		= (practice1==1)
+	gen p_fertilizantes = (practice2==1)
+	gen p_pesticidas 	= (practice3==1)
+	gen p_semillas_mejoradas = (practice4==1)
+	gen p_sistema_riego = (practice5==1)
+	gen p_maquinaria	= (practice6==1)
+	gen p_ninguna		= (practice7==1)
+	
+	
 	
 ******* Stratas *********************************
 * pending - whatsapp top5% comunities 
@@ -289,5 +323,5 @@ tab attitud_3_b, gen(attitud_3_b_)
 ******* Module H13 - life conditions *************************
 
 tab life_cond_2a, gen(life_cond_2a_)
-
+keep if muestra_dig ==1
  save "$data/digitagro_clean", replace
