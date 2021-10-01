@@ -12,14 +12,16 @@ References:
 Output:             Balance tables
 ==================================================*/
 
-global path "C:\Users\ALOP\Inter-American Development Bank Group\Angela - General\WB\GTM - IE DIGITAGRO\07 Endline"
-global path "C:\Users\ALOP\Inter-American Development Bank Group\Angela - General\WB\GTM - IE DIGITAGRO\07 Endline"
+global path "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO\07 Endline"
 global data 	"${path}\07 01 Data"
 
 use "${data}/digitagro_clean", clear
 
-global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent edad edad2 e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria 
+global controll n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent age_18_29 age_30_39 age_40_49 age_50_mas e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria 
 
+global controlsh n_chidren n_members adult_men adult_women head_self head_parnter head_parent age_18_29 age_30_39 age_40_49 age_50_mas e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria terreno_cuerdas_mayor0_1 terreno_cuerdas_1_2 terreno_cuerdas_2_3 terreno_cuerdas_6_10 terreno_cuerdas_10mas land_owner zc_fria zc_caliente zc_ambas ciclo_corto ciclo_perenne ciclo_nd
+
+global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent age_18_29 age_30_39 age_40_49 age_50_mas e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria terreno_cuerdas_mayor0_1 terreno_cuerdas_1_2 terreno_cuerdas_2_3 terreno_cuerdas_6_10 terreno_cuerdas_10mas land_owner
 
 ******** Balance table ************************************
 ******* Module H3 - LAND *******************************
@@ -162,13 +164,10 @@ yield_4_1000 "1000. None" @ ///
 ) replace 
 
 
-
-
-
 * clustered - stratum  + fixed effects - conditional 
-global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent edad edad2 e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria terreno_cuerdas_log land_owner
 
-iebaltab $harvest, pt grpvar(treatment_el_1) save("$output\4.harvest_table_clus_c.xlsx") stdev vce(cluster village) fix(stratum) cov($controls) covarmissok  grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1)  ///
+
+iebaltab $harvest if complete_controls==1, pt grpvar(treatment_el_1) save("$output\4.harvest_table_clus_c.xlsx") stdev vce(cluster village) fix(stratum) cov($controlsh) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1)  ///
 rowlabels( ///
 yield_2_1 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
 yield_2_6	"    6. Broccoli" @ ///
@@ -226,46 +225,42 @@ yield_4_1000 "1000. None" @ ///
 ******** Balance table ************************************
 ******* Module H4 - HARVEST with other dissagregations  *******************************
  * unconditional 
-global harvest2 yield_2_1 yield_2_6 yield_2_9 yield_2_13 yield_2_15 yield_2_16 yield_2_20 yield_2_21 yield_2_31 yield_2_34 yield_2_35 yield_2_37 yield_2_40 yield_2_42 yield_2_43 yield_2_44 yield_2_45 yield_2_46 yield_2_47 yield_2_48 yield_2_49 yield_2_50 yield_2_997 yield_2_997_1 yield_2_aguacate  yield_2_alverja yield_2_chile yield_2_cacao yield_2_ejote yield_2_hierbamora yield_2_nabos yield_2_guisquil yield_2_maxan yield_2_durazno yield_2_998 yield_2_999 yield_2_1000 yield_3_1 yield_3_2 yield_3_3 yield_3_4 yield_3_5 yield_3_999 yield_4_51 yield_4_52 yield_4_53 yield_4_54 yield_4_55 yield_4_56 yield_4_57 yield_4_58 yield_4_59 yield_4_60 yield_4_61 yield_4_62 yield_4_63 yield_4_64 yield_4_994 yield_4_995 yield_4_996 yield_4_1000 
+global harvest2 yield_2_1_t yield_2_aguacate yield_2_rice yield_2_6_t yield_2_9 yield_2_chile yield_2_13 yield_2_ejote yield_2_15 yield_2_16_t yield_2_guisquil yield_2_20 yield_2_21_t yield_2_maxan yield_2_31 yield_2_34 yield_2_35 yield_2_37 yield_2_yuca yield_2_40_t yield_2_42_t yield_2_43_t yield_2_44_t yield_2_45_t yield_2_46_t yield_2_47_t yield_2_48_t yield_2_49_t yield_2_50_t yield_2_997_1  yield_2_998_1 yield_2_999_1 yield_2_1000 yield_3_1 yield_3_2 yield_3_3 yield_3_4 yield_3_5 yield_3_999 yield_4_51 yield_4_52 yield_4_53 yield_4_54 yield_4_55 yield_4_56 yield_4_57 yield_4_58 yield_4_59 yield_4_60 yield_4_61 yield_4_62 yield_4_63 yield_4_64 yield_4_994 yield_4_995 yield_4_996 yield_4_1000 
  
 iebaltab $harvest2, pt grpvar(treatment_el_1) save("$output\4.harvest2_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
 rowlabels( ///
-yield_2_1 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
-yield_2_6	"    6. Broccoli" @ ///
+yield_2_1_t 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
+yield_2_aguacate "2. Avocado" @ ///
+yield_2_rice 	"5. Rice" @ ///
+yield_2_6_t	"    6. Broccoli" @ ///
 yield_2_9	"    9. Onion" @ ///
+yield_2_chile " 10. Chile" @ ///
 yield_2_13	"   13. Cilantro" @ ///
+yield_2_ejote  "14. Ejote"  @ ///
 yield_2_15	"   15. Spinach" @ ///
-yield_2_16	"   16. Black bean" @ /// 
+yield_2_16_t "  16. Black bean" @ /// 
+yield_2_guisquil "17. Guisquil" @ /// 
 yield_2_20	"   20. Limes" @ ///
-yield_2_21	"   21. Corn" @ ///
+yield_2_21_t "  21. Corn" @ ///
+yield_2_maxan  "25. Hojas de Maxan" @ ///
 yield_2_31	"   31. Potato" @ ///
 yield_2_34	"   34. Plantain" @ ///
 yield_2_35	"   35. Cabbage" @ ///
 yield_2_37	"   37. Tomato" @ ///
-yield_2_40	"   40. Carrots" @ ///
-yield_2_42	"   42. Radish" @ ///
-yield_2_43	"   43. Cucumber" @ ///
-yield_2_44	"   44. Fava bean" @ ///
-yield_2_45	"   45. Cauliflower" @ ///
-yield_2_46	"   46. Chipilín" @ ///
-yield_2_47	"   47. Coffee" @ ///
-yield_2_48	"   48. Banana" @ ///
-yield_2_49	"   49. Beetroot" @ ///
-yield_2_50	"   50. Lettuce" @ ///
-yield_2_997	"   997. Other1" @ ///
-yield_2_997_1	"   997. Other1 modified" @ ///
-yield_2_aguacate "Avocado" @ ///  
-yield_2_alverja "Pee" @ ///
-yield_2_chile "Chile" @ ///
-yield_2_cacao "Cacao" @ ///
-yield_2_ejote "Ejote" @ ///
-yield_2_hierbamora "Hierba mora" @ ///
-yield_2_nabos "Nabos" @ ///
-yield_2_guisquil "Guisquil" @ ///
-yield_2_maxan "Hojas de Mashan" @ ///
-yield_2_durazno "Durazno" @ ///
-yield_2_998	"   998. Other2" @ ///
-yield_2_999	"   999. Other3" @ ///
+yield_2_yuca "	39. Yuca" @ ///
+yield_2_40_t "  40. Carrots" @ ///
+yield_2_42_t "  42. Radish" @ ///
+yield_2_43_t "  43. Pepino" @ ///
+yield_2_44_t "  44. Fava bean" @ ///
+yield_2_45_t "  45. Cauliflower" @ ///
+yield_2_46_t "  46. Chipilín" @ ///
+yield_2_47_t "  47. Coffee" @ ///
+yield_2_48_t "  48. Banana" @ ///
+yield_2_49_t "  49. Beetroot" @ ///
+yield_2_50_t "  50. Lettuce" @ ///
+yield_2_997_1	" 997. Other1 modified" @ ///
+yield_2_998_1 "   998. Other2 modified" @ ///
+yield_2_999_1	" 999. Other3 modified" @ ///
 yield_2_1000 "1000. None" @ ///
 yield_3_1	"In June and July 2021, why didn't the household partake in a harvest?    1. It's not the season " @ ///
 yield_3_2	"    2. Lack of manpower" @ ///
@@ -296,42 +291,38 @@ yield_4_1000 "1000. None" @ ///
 
 iebaltab $harvest2, pt grpvar(treatment_el_1) save("$output\4.harvest2_table_clus.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) fix(stratum) ///
 rowlabels( ///
-yield_2_1 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
-yield_2_6	"    6. Broccoli" @ ///
+yield_2_1_t 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
+yield_2_aguacate "2. Avocado" @ ///
+yield_2_rice 	"5. Rice" @ ///
+yield_2_6_t	"    6. Broccoli" @ ///
 yield_2_9	"    9. Onion" @ ///
+yield_2_chile " 10. Chile" @ ///
 yield_2_13	"   13. Cilantro" @ ///
+yield_2_ejote  "14. Ejote"  @ ///
 yield_2_15	"   15. Spinach" @ ///
-yield_2_16	"   16. Black bean" @ /// 
+yield_2_16_t "  16. Black bean" @ /// 
+yield_2_guisquil "17. Guisquil" @ ///  
 yield_2_20	"   20. Limes" @ ///
-yield_2_21	"   21. Corn" @ ///
+yield_2_21_t "  21. Corn" @ ///
+yield_2_maxan  "25. Hojas de Maxan" @ ///
 yield_2_31	"   31. Potato" @ ///
 yield_2_34	"   34. Plantain" @ ///
 yield_2_35	"   35. Cabbage" @ ///
 yield_2_37	"   37. Tomato" @ ///
-yield_2_40	"   40. Carrots" @ ///
-yield_2_42	"   42. Radish" @ ///
-yield_2_43	"   43. Cucumber" @ ///
-yield_2_44	"   44. Fava bean" @ ///
-yield_2_45	"   45. Cauliflower" @ ///
-yield_2_46	"   46. Chipilín" @ ///
-yield_2_47	"   47. Coffee" @ ///
-yield_2_48	"   48. Banana" @ ///
-yield_2_49	"   49. Beetroot" @ ///
-yield_2_50	"   50. Lettuce" @ ///
-yield_2_997	"   997. Other1" @ ///
-yield_2_997_1	"   997. Other1 modified" @ ///
-yield_2_aguacate "Avocado" @ ///  
-yield_2_alverja "Pee" @ ///
-yield_2_chile "Chile" @ ///
-yield_2_cacao "Cacao" @ ///
-yield_2_ejote "Ejote" @ ///
-yield_2_hierbamora "Hierba mora" @ ///
-yield_2_nabos "Nabos" @ ///
-yield_2_guisquil "Guisquil" @ ///
-yield_2_maxan "Hojas de Mashan" @ ///
-yield_2_durazno "Durazno" @ ///
-yield_2_998	"   998. Other2" @ ///
-yield_2_999	"   999. Other3" @ ///
+yield_2_yuca "	39. Yuca" @ ///
+yield_2_40_t "  40. Carrots" @ ///
+yield_2_42_t "  42. Radish" @ ///
+yield_2_43_t "  43. Pepino" @ ///
+yield_2_44_t "  44. Fava bean" @ ///
+yield_2_45_t "  45. Cauliflower" @ ///
+yield_2_46_t "  46. Chipilín" @ ///
+yield_2_47_t "  47. Coffee" @ ///
+yield_2_48_t "  48. Banana" @ ///
+yield_2_49_t "  49. Beetroot" @ ///
+yield_2_50_t "  50. Lettuce" @ ///
+yield_2_997_1 " 997. Other1 modified" @ ///
+yield_2_998_1 " 998. Other2 modified" @ ///
+yield_2_999_1	" 999. Other3 modified" @ ///
 yield_2_1000 "1000. None" @ ///
 yield_3_1	"In June and July 2021, why didn't the household partake in a harvest?    1. It's not the season " @ ///
 yield_3_2	"    2. Lack of manpower" @ ///
@@ -360,44 +351,40 @@ yield_4_1000 "1000. None" @ ///
 ) replace
  
  
-iebaltab $harvest2, pt grpvar(treatment_el_1) save("$output\4.harvest2_table_clus_c.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) fix(stratum) cov($controls) covarmissok  ///
+iebaltab $harvest2 if complete_controls==1, pt grpvar(treatment_el_1) save("$output\4.harvest2_table_clus_c.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) fix(stratum) cov($controlsh) ///
 rowlabels( ///
-yield_2_1 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
-yield_2_6	"    6. Broccoli" @ ///
+yield_2_1_t 	"In June and July 2021, what did the household harvest?   1. Chard" @ ///
+yield_2_aguacate "2. Avocado" @ ///
+yield_2_rice 	"5. Rice" @ ///
+yield_2_6_t	"    6. Broccoli" @ ///
 yield_2_9	"    9. Onion" @ ///
+yield_2_chile " 10. Chile" @ ///
 yield_2_13	"   13. Cilantro" @ ///
+yield_2_ejote  "14. Ejote"  @ ///
 yield_2_15	"   15. Spinach" @ ///
-yield_2_16	"   16. Black bean" @ /// 
+yield_2_16_t "  16. Black bean" @ /// 
+yield_2_guisquil "17. Guisquil" @ /// 
 yield_2_20	"   20. Limes" @ ///
-yield_2_21	"   21. Corn" @ ///
+yield_2_21_t "  21. Corn" @ ///
+yield_2_maxan  "25. Hojas de Maxan" @ ///
 yield_2_31	"   31. Potato" @ ///
 yield_2_34	"   34. Plantain" @ ///
 yield_2_35	"   35. Cabbage" @ ///
 yield_2_37	"   37. Tomato" @ ///
-yield_2_40	"   40. Carrots" @ ///
-yield_2_42	"   42. Radish" @ ///
-yield_2_43	"   43. Cucumber" @ ///
-yield_2_44	"   44. Fava bean" @ ///
-yield_2_45	"   45. Cauliflower" @ ///
-yield_2_46	"   46. Chipilín" @ ///
-yield_2_47	"   47. Coffee" @ ///
-yield_2_48	"   48. Banana" @ ///
-yield_2_49	"   49. Beetroot" @ ///
-yield_2_50	"   50. Lettuce" @ ///
-yield_2_997	"   997. Other1" @ ///
-yield_2_997_1	"   997. Other1 modified" @ ///
-yield_2_aguacate "Avocado" @ ///  
-yield_2_alverja "Pee" @ ///
-yield_2_chile "Chile" @ ///
-yield_2_cacao "Cacao" @ ///
-yield_2_ejote "Ejote" @ ///
-yield_2_hierbamora "Hierba mora" @ ///
-yield_2_nabos "Nabos" @ ///
-yield_2_guisquil "Guisquil" @ ///
-yield_2_maxan "Hojas de Mashan" @ ///
-yield_2_durazno "Durazno" @ ///
-yield_2_998	"   998. Other2" @ ///
-yield_2_999	"   999. Other3" @ ///
+yield_2_yuca "	39. Yuca" @ ///
+yield_2_40_t "  40. Carrots" @ ///
+yield_2_42_t "  42. Radish" @ ///
+yield_2_43_t "  43. Pepino" @ ///
+yield_2_44_t "  44. Fava bean" @ ///
+yield_2_45_t "  45. Cauliflower" @ ///
+yield_2_46_t "  46. Chipilín" @ ///
+yield_2_47_t "  47. Coffee" @ ///
+yield_2_48_t "  48. Banana" @ ///
+yield_2_49_t "  49. Beetroot" @ ///
+yield_2_50_t "  50. Lettuce" @ ///
+yield_2_997_1	" 997. Other1 modified" @ ///
+yield_2_998_1 "   998. Other2 modified" @ ///
+yield_2_999_1	" 999. Other3 modified" @ ///
 yield_2_1000 "1000. None" @ ///
 yield_3_1	"In June and July 2021, why didn't the household partake in a harvest?    1. It's not the season " @ ///
 yield_3_2	"    2. Lack of manpower" @ ///
@@ -511,7 +498,7 @@ comm_13b_1000 " 1000. none" @ ///
 
 * clustered - stratum  + fixed effects - conditional 
 
-iebaltab $sales, pt grpvar(treatment_el_1) save("$output\5.sales_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) covarmissok totallabel(Overall) control(1) ///
+iebaltab $sales if complete_controls==1, pt grpvar(treatment_el_1) save("$output\5.sales_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) totallabel(Overall) control(1) ///
 rowlabels( ///
 comm_3_1 	"In June and July 2021, to whom did the household sell its crops and / or animal products?: 		1. Coyote /Middlemen/Intermediary (no PAE)" @ ///
 comm_3_2	"	2. Assocition/ Cooperative" @ ///
@@ -553,10 +540,10 @@ comm_13b_1000 " 1000. none" @ ///
 *gen treatment_1 = (treatment_bl_1==2)
 global pae infor_2 infor_3_1 infor_3_2 infor_3_3 infor_3_4 infor_3_5 infor_3_6 infor_3_999 infor_4 infor_5a infor_5b infor_5c infor_5d infor_6 infor_7_1 infor_7_2 infor_7_3 infor_7_4 infor_7_5 infor_7_6 infor_7_7 infor_7_999 infor_8_1_1 infor_8_1_2 infor_8_1_3 infor_8_1_4 infor_8_1_5 infor_8_1_999 infor_9 infor_9a infor_9b_1 infor_9b_2 infor_9b_3 infor_9b_4 infor_9b_5 infor_9b_6 infor_9b_7 infor_9b_999 infor_12 infor_13 infor_14 infor_15 infor_17a infor_17b
 
-iebaltab $pae, pt grpvar(treatment_el_1) save("$output\6.PAE_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
+iebaltab $pae if complete_controls==1, pt grpvar(treatment_el_1) save("$output\6.PAE_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
 rowlabels( ///
 infor_2 "2. % woman with knowledge about the existence of the School Feeding Program (SFP)" @ ///
-infor_3_1	"3. SFP information source: Ministry of Agriculture, Livestock and Food (MAGA)" @ ///
+infor_3_1	"3. SFP information source: Ministry of Agriculture, Livestock and Food (MAGA)" @ /// 
 infor_3_2	"3. SFP information source: Ministry of Educcation (MINEDUC) campaign" @ ///
 infor_3_3	"3. SFP information source: Another farmer" @ ///
 infor_3_4	"3. SFP information source: School/ Teacher/ OPF" @ ///
@@ -564,7 +551,7 @@ infor_3_5	"3. SFP information source: Informative videos and SMSs" @ ///
 infor_3_6	"3. SFP information source: Friends/ Relatives/ Neighbors" @ ///
 infor_3_999 "3. SFP information source: Other" @ ///
 infor_4 	"4. Household registered to sell crops to the SFP" @ ///
-infor_5a	"5a. knowledge that the SFP buys crops and / or animal products from local farmers" @ ///
+infor_5a	"5a. knowledge that the SFP buys crops and / or animal products from local farmers" @ /// 
 infor_5b	"5b. knowledge that someone in the household can register as a provider of the SFP" @ ///
 infor_5c	"5c. knowledge of the requirements to register as a provider of the SFP" @ ///
 infor_5d	"5d. think the process to register as a supplier is simple" @ ///
@@ -603,7 +590,7 @@ infor_17b 	"17b.Crops sold to schools in the School Feeding Program must have no
 
 * clustered - stratum  
 
-iebaltab $pae, pt grpvar(treatment_el_1) save("$output\6.PAE_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
+iebaltab $pae if complete_controls==1, pt grpvar(treatment_el_1) save("$output\6.PAE_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
 rowlabels( ///
 infor_2 "2. % woman with knowledge about the existence of the School Feeding Program (SFP)" @ ///
 infor_3_1	"3. SFP information source: Ministry of Agriculture, Livestock and Food (MAGA)" @ ///
@@ -654,7 +641,7 @@ infor_17b 	"17b.Crops sold to schools in the School Feeding Program must have no
 * clustered - stratum  + fixed effects - conditional 
 
 
-iebaltab $pae, pt grpvar(treatment_el_1) save("$output\6.PAE_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) covarmissok totallabel(Overall) control(1) ///
+iebaltab $pae if complete_controls==1, pt grpvar(treatment_el_1) save("$output\6.PAE_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) totallabel(Overall) control(1) ///
 rowlabels( ///
 infor_2 "2. % woman with knowledge about the existence of the School Feeding Program (SFP)" @ ///
 infor_3_1	"3. SFP information source: Ministry of Agriculture, Livestock and Food (MAGA)" @ ///
@@ -705,7 +692,7 @@ infor_17b 	"17b.Crops sold to schools in the School Feeding Program must have no
 ******* Balance table ********************************************
 ******* Module H7 - Agro practices *******************************
  global agro mark_2_1 mark_2_2 mark_2_3 mark_2_4 mark_6_1 mark_6_2 mark_6_3 mark_6_4 mark_6_5
-iebaltab $agro, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total  totallabel(Overall) control(1) ///
+iebaltab $agro if complete_controls==1, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total  totallabel(Overall) control(1) ///
 rowlabels( ///
 mark_2_1 	"In June and July this year, you stored the harvested in    1. In dry and clean places" @ ///
 mark_2_2	"		2. In clean and humid places " @ ///
@@ -720,7 +707,7 @@ mark_6_5	"	  999. Other (Specify) " @ ///
  
 * clustered - stratum 
  
-iebaltab $agro, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total  covarmissok totallabel(Overall) fix(stratum) control(1) ///
+iebaltab $agro if complete_controls==1, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total  covarmissok totallabel(Overall) fix(stratum) control(1) ///
 rowlabels( ///
 mark_2_1 	"In June and July this year, you stored the harvested in    1. In dry and clean places" @ ///
 mark_2_2	"		2. In clean and humid places " @ ///
@@ -734,7 +721,7 @@ mark_6_5	"	  999. Other (Specify) " @ ///
 ) replace 
  
 * clustered - stratum  + fixed effects - conditional 
- iebaltab $agro, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) covarmissok totallabel(Overall) control(1) ///
+ iebaltab $agro if complete_controls==1, pt grpvar(treatment_el_1) save("$output\7.agro_practices_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls)  totallabel(Overall) control(1) ///
 rowlabels( ///
 mark_2_1 	"In June and July this year, you stored the harvested in    1. In dry and clean places" @ ///
 mark_2_2	"		2. In clean and humid places " @ ///
@@ -753,7 +740,7 @@ mark_6_5	"	  999. Other (Specify) " @ ///
 ******* Module H8 - marketing ************************************
 
 	
-iebaltab taxin invoice invoice_interest, pt grpvar(treatment_el_1) save("$output\8.marketing_table_.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
+iebaltab taxin invoice invoice_interest if complete_controls==1, pt grpvar(treatment_el_1) save("$output\8.marketing_table_.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
 rowlabels( ///
 taxin	"Does anyone in the household have a Tax Identification Number (TIN)?....1. Yes " @ ///
 invoice	"Can someone from the household issue invoices?.... 1. Yes " @ ///
@@ -761,7 +748,7 @@ invoice_interest	"Are you interested in getting an invoice?.... 1. Yes " @ ///
 ) replace 
 
 * clustered - stratum  
-iebaltab taxin invoice invoice_interest, pt grpvar(treatment_el_1) save("$output\8.marketing_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
+iebaltab taxin invoice invoice_interest if complete_controls==1, pt grpvar(treatment_el_1) save("$output\8.marketing_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
 rowlabels( ///
 taxin	"Does anyone in the household have a Tax Identification Number (TIN)?....1. Yes " @ ///
 invoice	"Can someone from the household issue invoices?.... 1. Yes " @ ///
@@ -769,7 +756,7 @@ invoice_interest	"Are you interested in getting an invoice?.... 1. Yes " @ ///
 ) replace 
 
 * clustered - stratum  + fixed effects - conditional 
-iebaltab taxin invoice invoice_interest, pt grpvar(treatment_el_1) save("$output\8.marketing_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) covarmissok totallabel(Overall) control(1) ///
+iebaltab taxin invoice invoice_interest if complete_controls==1, pt grpvar(treatment_el_1) save("$output\8.marketing_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls)  totallabel(Overall) control(1) ///
 rowlabels( ///
 taxin	"Does anyone in the household have a Tax Identification Number (TIN)?....1. Yes " @ ///
 invoice	"Can someone from the household issue invoices?.... 1. Yes " @ ///
@@ -781,7 +768,7 @@ invoice_interest	"Are you interested in getting an invoice?.... 1. Yes " @ ///
 ******* Balance table ********************************************
 ******* Module H10 - perception ********************************** 
 global perception inst_2a_2 inst_2a_3 inst_2a_4 inst_2a_5 inst_2a_1 inst_2b_2 inst_2b_3 inst_2b_4 inst_2b_5 inst_2b_1  inst_2c_2 inst_2c_3 inst_2c_4 inst_2c_5 inst_2c_1
-iebaltab $perception, pt grpvar(treatment_el_1) save("$output\10.perception_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
+iebaltab $perception if complete_controls==1, pt grpvar(treatment_el_1) save("$output\10.perception_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
 rowlabels( ///
 inst_2a_2	"Currently, how much confidence do you have in Minitry of Agriculture (MAGA)....1. Very much " @ ///
 inst_2a_3	"		2. Somewhat " @ ///
@@ -802,7 +789,7 @@ inst_2c_1	"		5. I don't know/ No response " @ ///
 
 * clustered - stratum 
 
-iebaltab $perception, pt grpvar(treatment_el_1) save("$output\10.perception_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
+iebaltab $perception if complete_controls==1, pt grpvar(treatment_el_1) save("$output\10.perception_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
 rowlabels( ///
 inst_2a_2	"Currently, how much confidence do you have in Minitry of Agriculture (MAGA)....1. Very much " @ ///
 inst_2a_3	"		2. Somewhat " @ ///
@@ -823,7 +810,7 @@ inst_2c_1	"		5. I don't know/ No response " @ ///
 
 * clustered - stratum  + fixed effects - conditional 
 
-iebaltab $perception, pt grpvar(treatment_el_1) save("$output\10.perception_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) covarmissok totallabel(Overall) control(1) ///
+iebaltab $perception if complete_controls==1, pt grpvar(treatment_el_1) save("$output\10.perception_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) totallabel(Overall) control(1) ///
 rowlabels( ///
 inst_2a_2	"Currently, how much confidence do you have in Minitry of Agriculture (MAGA)....1. Very much " @ ///
 inst_2a_3	"		2. Somewhat " @ ///
@@ -849,7 +836,7 @@ inst_2c_1	"		5. I don't know/ No response " @ ///
 ******* Module H11 - attitudes *********************************** 
 
 
-iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
+iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1 if complete_controls==1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
 rowlabels( ///
 attitud_3_a_2	"How much do you agree or disagree with the following statements? a.  While doing a difficult job, I am sure I can do it  1. Disagree" @ ///
 attitud_3_a_3	"		2. Agree nor disagree " @ ///
@@ -863,7 +850,7 @@ attitud_3_b_1	"		4. I don't know/ No response " @ ///
 
 * clustered - stratum 
 
-iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) totallabel(Overall) control(1) ///
+iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1 if complete_controls==1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) totallabel(Overall) control(1) ///
 rowlabels( ///
 attitud_3_a_2	"How much do you agree or disagree with the following statements? a.  While doing a difficult job, I am sure I can do it  1. Disagree" @ ///
 attitud_3_a_3	"		2. Agree nor disagree " @ ///
@@ -877,7 +864,7 @@ attitud_3_b_1	"		4. I don't know/ No response " @ ///
 
 * clustered - stratum  + fixed effects - conditional 
 
-iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) covarmissok totallabel(Overall) control(1) ///
+iebaltab attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1 if complete_controls==1, pt grpvar(treatment_el_1) save("$output\11.attitudes_table_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) totallabel(Overall) control(1) ///
 rowlabels( ///
 attitud_3_a_2	"How much do you agree or disagree with the following statements? a.  While doing a difficult job, I am sure I can do it  1. Disagree" @ ///
 attitud_3_a_3	"		2. Agree nor disagree " @ ///
@@ -896,7 +883,7 @@ attitud_3_b_1	"		4. I don't know/ No response " @ ///
  ** should be on the postfile tables 
 global life life_cond_2_1 life_cond_2_2 life_cond_2_3 life_cond_2_4 life_cond_2_5 life_cond_2_6 life_cond_2_7 life_cond_2_8 life_cond_2_9 life_cond_2_10 life_cond_2_11 life_cond_2_999 life_cond_2_1000 life_cond_2a_1 life_cond_2a_2 life_cond_2a_3 life_cond_2a_4 life_cond_2a_5 life_cond_2a_6 life_cond_2a_7 life_cond_2a_8 life_cond_2a_9 life_cond_2a_10 life_cond_2a_11 life_cond_2a_12
 
-iebaltab $life, pt grpvar(treatment_el_1) save("$output\13.life_conditions.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
+iebaltab $life if complete_controls==1, pt grpvar(treatment_el_1) save("$output\13.life_conditions.xlsx") stdev vce(robust) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) control(1) ///
 rowlabels( ///
 life_cond_2_1	"What are the main problems that the household faces when selling its crops?  1. Could not get inputs (fertilizers, pesticides, seeds, etc.) " @ ///
 life_cond_2_2	"2. Increase in the price of inputs (fertilizers, pesticides, seeds, etc.) " @ ///
@@ -927,7 +914,7 @@ life_cond_2a_12	"	999. Other  " @ ///
  
 * clustered - stratum 
  
-iebaltab $life, pt grpvar(treatment_el_1) save("$output\13.life_conditions_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
+iebaltab $life if complete_controls==1, pt grpvar(treatment_el_1) save("$output\13.life_conditions_clus.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total totallabel(Overall) fix(stratum) control(1) ///
 rowlabels( ///
 life_cond_2_1	"What are the main problems that the household faces when selling its crops?  1. Could not get inputs (fertilizers, pesticides, seeds, etc.) " @ ///
 life_cond_2_2	"2. Increase in the price of inputs (fertilizers, pesticides, seeds, etc.) " @ ///
@@ -958,7 +945,7 @@ life_cond_2a_12	"	999. Other  " @ ///
  
 * clustered - stratum  + fixed effects - conditional  
  
-iebaltab $life, pt grpvar(treatment_el_1) save("$output\13.life_conditions_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) covarmissok totallabel(Overall) control(1) ///
+iebaltab $life if complete_controls==1 if complete_controls==1, pt grpvar(treatment_el_1) save("$output\13.life_conditions_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) cov($controls) totallabel(Overall) control(1) ///
 rowlabels( ///
 life_cond_2_1	"What are the main problems that the household faces when selling its crops?  1. Could not get inputs (fertilizers, pesticides, seeds, etc.) " @ ///
 life_cond_2_2	"2. Increase in the price of inputs (fertilizers, pesticides, seeds, etc.) " @ ///
@@ -1043,7 +1030,7 @@ nopareja		"2. Marital separation, separated, divorced, widowed, single" @ ///
 
 * clustered - stratum  + fixed effects - conditional 
 
-iebaltab n_members n_chidren adult_men adult_women adults_65 head_self head_parnter head_parent head_other e_ninguno e_primaria e_secundaria e_terciaria e_ninguno_p e_primaria_p e_secundaria_p e_terciaria_p pareja nopareja, pt grpvar(treatment_el_1) save("$output\14.household_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) totallabel(Overall) control(1) ///
+iebaltab n_members n_chidren adult_men adult_women adults_65 head_self head_parnter head_parent head_other e_ninguno e_primaria e_secundaria e_terciaria e_ninguno_p e_primaria_p e_secundaria_p e_terciaria_p pareja nopareja if complete_controls==1, pt grpvar(treatment_el_1) save("$output\14.household_clus_c.xlsx") stdev vce(cluster village) grplabels("1 Treatment @ 0 Control") total fix(stratum) totallabel(Overall) control(1) ///
 rowlabels( ///
 n_members	"2. Including you, how many members make up your household?" @ ///
 n_chidren	"3. How many children under the age of 15 are in your household?" @ ///
@@ -1186,13 +1173,11 @@ preserve
 	
 	postfile `ptablas' str25(Indicador Module tipo_control tipo_valor value)   using `tablas', replace
 		
-	*Total
- global controls1 n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent head_other educa_wmen1 edad edad2 e_ninguno e_primaria e_secundaria e_terciaria pareja nopareja
-	
+
 * Land 
 	local indicadores terreno_cuerdas_log land_owner  
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1
+				reg `indicador' treatment_el_1 if complete_controls==1
 			
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1200,7 +1185,7 @@ preserve
 				post `ptablas' ("`indicador'") ("Land") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Land") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village) 
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1208,7 +1193,7 @@ preserve
 				post `ptablas' ("`indicador'") ("Land") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Land") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls1 i.stratum , vce(cluster village)
+				reg `indicador' treatment_el_1 $controls1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1221,12 +1206,11 @@ preserve
 		
 * harvest 
 
-	global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent edad edad2 e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria terreno_cuerdas_log land_owner
 
 	local indicadores $harvest
 
 	foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1
+				reg `indicador' treatment_el_1 if complete_controls==1
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1234,7 +1218,7 @@ preserve
 				post `ptablas' ("`indicador'") ("Harvest") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Harvest") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1242,7 +1226,7 @@ preserve
 				post `ptablas' ("`indicador'") ("Harvest") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Harvest") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum , vce(cluster village)
+				reg `indicador' treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1255,12 +1239,12 @@ preserve
 		
 * harvest2 
 
-	global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent edad edad2 e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria terreno_cuerdas_log land_owner
+	*global controls n_chidren n_members adult_men adult_women adults_65 head_self head_parnter head_parent edad edad2 e_ninguno e_primaria e_secundaria pareja p_fertilizantes p_pesticidas p_semillas_mejoradas p_sistema_riego p_maquinaria terreno_cuerdas_log land_owner
 
 	local indicadores $harvest2
 
 	foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1
+				reg `indicador' treatment_el_1 if complete_controls==1
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1268,7 +1252,7 @@ preserve
 				post `ptablas' ("`indicador'") ("Harvest2") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Harvest2") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1276,7 +1260,7 @@ preserve
 				post `ptablas' ("`indicador'") ("Harvest2") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("Harvest2") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum , vce(cluster village)
+				reg `indicador' treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1289,7 +1273,7 @@ preserve
 * PAE
 	local indicadores $pae 
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1
+				reg `indicador' treatment_el_1 if complete_controls==1
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1297,7 +1281,7 @@ preserve
 				post `ptablas' ("`indicador'") ("PAE") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("PAE") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1305,7 +1289,7 @@ preserve
 				post `ptablas' ("`indicador'") ("PAE") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("PAE") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum , vce(cluster village)
+				reg `indicador' treatment_el_1 $controls i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1317,7 +1301,7 @@ preserve
 *sales 			
 local indicadores $sales 
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1 
+				reg `indicador' treatment_el_1 if complete_controls==1
 			
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1325,7 +1309,7 @@ local indicadores $sales
 				post `ptablas' ("`indicador'") ("SALES") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("SALES") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1333,7 +1317,7 @@ local indicadores $sales
 				post `ptablas' ("`indicador'") ("SALES") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("SALES") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum , vce(cluster village)
+				reg `indicador' treatment_el_1 $controls i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1347,7 +1331,7 @@ local indicadores $sales
 local indicadores $agro
 			
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1 
+				reg `indicador' treatment_el_1 if complete_controls==1
 			
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1355,7 +1339,7 @@ local indicadores $agro
 				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1363,7 +1347,7 @@ local indicadores $agro
 				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("agro_practices") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum , vce(cluster village)
+				reg `indicador' treatment_el_1 $controls i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1377,7 +1361,7 @@ local indicadores $agro
 local indicadores taxin invoice invoice_interest
 
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1 
+				reg `indicador' treatment_el_1 if complete_controls==1
 			
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1385,7 +1369,7 @@ local indicadores taxin invoice invoice_interest
 				post `ptablas' ("`indicador'") ("marketing") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("marketing") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1393,7 +1377,7 @@ local indicadores taxin invoice invoice_interest
 				post `ptablas' ("`indicador'") ("marketing") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("marketing") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 $controls i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1407,7 +1391,7 @@ local indicadores taxin invoice invoice_interest
 local indicadores $perception
 
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1 
+				reg `indicador' treatment_el_1 if complete_controls==1
 			
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1415,7 +1399,7 @@ local indicadores $perception
 				post `ptablas' ("`indicador'") ("perception") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("perception") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1423,7 +1407,7 @@ local indicadores $perception
 				post `ptablas' ("`indicador'") ("perception") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("perception") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 $controls i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1437,7 +1421,7 @@ local indicadores $perception
 local indicadores attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitud_3_b_2 attitud_3_b_3 attitud_3_b_4 attitud_3_b_1
 
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1 
+				reg `indicador' treatment_el_1  if complete_controls==1
 			
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1445,7 +1429,7 @@ local indicadores attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitu
 				post `ptablas' ("`indicador'") ("attitudes") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("attitudes") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1453,7 +1437,7 @@ local indicadores attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitu
 				post `ptablas' ("`indicador'") ("attitudes") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("attitudes") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 $controls i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1467,7 +1451,7 @@ local indicadores attitud_3_a_2 attitud_3_a_3 attitud_3_a_4 attitud_3_a_1 attitu
 local indicadores $life
 
 			foreach indicador of local indicadores {
-				reg `indicador' treatment_el_1 
+				reg `indicador' treatment_el_1  if complete_controls==1
 			
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1475,7 +1459,7 @@ local indicadores $life
 				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
@@ -1483,7 +1467,7 @@ local indicadores $life
 				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles, cluster") ("beta") ("`beta'") 
 				post `ptablas' ("`indicador'") ("life_conditions") ("sin controles, cluster") ("se") ("[`se']")
 				
-				reg `indicador' treatment_el_1 $controls i.stratum, vce(cluster village)
+				reg `indicador' treatment_el_1 $controls i.stratum if complete_controls==1, vce(cluster village)
 				
 				local beta : di %6.4f _b[treatment_el_1]
 				local se: di %6.4f _se[treatment_el_1]
