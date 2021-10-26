@@ -19,13 +19,14 @@ version 16
 drop _all
 *ssc install ietoolkit
 
-global path "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO\07 Endline"
-global data 	"${path}\07 01 Data"
-global clean	"${path}\07 4 Clean Data"
-global output	"${path}\07 3 Docs\Digitagro - balance tables"
+global path "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO"
+global data_el 	"${path}\07 Endline\07 01 Data"
+global data_bl 	"${path}\06 Baseline\06 01 Data"
+global clean_el	"${path}\07 Endline\07 4 Clean Data"
+global clean_bl	"${path}\06 Baseline\06 4 Clean Data"
+global output	"${path}\07 Endline\07 3 Docs\Digitagro - balance tables"
 global baseline "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO\06 Baseline\06 4 Clean Data" 
-
-use "${data}/gua_digitagro_el_clean_no_pii.dta", clear
+use "${data_el}/gua_digitagro_el_clean_no_pii.dta", clear
 
 
 /*==================================================
@@ -54,8 +55,6 @@ lab var treatment_el_1 "Effect of the Treatment"
 gen control = (treatment_el_1==0)
 
 
-save "$data/digitagro_clean", replace 
-
 ******* Controls ********************************
 
 destring infor_8_1, replace 
@@ -69,10 +68,11 @@ replace infor_17a=. if infor_17a==-8
 replace infor_17b=0 if infor_17b==2
 replace infor_17b=. if infor_17b==-8
 
-joinby caseid using "$baseline\datos_limpios", unmatched(master) update 
-save "$data/digitagro_clean", replace 
-drop _merge
-merge m:m caseid using "$baseline\strata.dta"
+joinby caseid using "$clean_bl\datos_limpios_controles", unmatched(master) update _merge(pegue)
+
+save "$data_el/digitagro_clean", replace 
+
+merge m:m caseid using "$clean_bl\strata.dta"
 keep if muestra_dig ==1
 *** household characteristics
 	g n_members 	= home_2 // household members
@@ -934,77 +934,7 @@ clonevar yield_2_50_1 = yield_2_50
 		  replace ciclo_nd =1 if ciclo_perenne==0 & ciclo_corto ==0 & yield_2_1000 ==0
 		  
 		  
-*==================================================================
-*		  Outcomes de analisis
-*==================================================================
 
-* a.	Harvested any agricultural (animal) product 
-
-	  g harvested = 0 if muestra_2 ==1
-replace harvested = 1 if yield_2_1000 ==0 | yield_4_1000 ==0
-label var harvested "Any agricultural-animal product"
-
-* b.	Harvested any COVID-19 PAE agricultural or animal product 
-
-	  g harvested_pae_covid1 = 0 if muestra_2 ==1 & harvested ==1
-replace harvested_pae_covid1 = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_ejote==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_37==1 | yield_2_yuca | yield_2_40_t ==1 | yield_2_43_t==1 | yield_2_48_t==1 | yield_4_56==1) & harvested ==1
-	
-* c.	Harvested any COVID-19 non-PAE agricultural or animal product 
-
-	  g harvested_no_pae_covid = 0 if muestra_2 ==1 & harvested ==1
-replace harvested_no_pae_covid = 1 if harvested ==1 & harvested_pae_covid1==0
-
-* d.	Harvested any COVID-19 PAE agricultural product  
-
-	  g harvested_pae_covid_agri = 0  if muestra_2 ==1 & yield_2_1000 ==0
-	  replace harvested_pae_covid_agri = 1 if harvested_pae_covid1==1 & yield_2_1000 ==0
-	  replace harvested_pae_covid_agri = 0 if yield_4_56==1 & yield_2_1000 ==0
-
-* e.	Harvested any COVID-19 non-PAE agricultural product  
-		  g harvested_no_pae_covid_agri = 0 if muestra_2 ==1 & yield_2_1000 ==0
-	replace harvested_no_pae_covid_agri = 1 if harvested_pae_covid_agri==0 & yield_2_1000 ==0
-
-* f.	Harvested any COVID-19 PAE animal product  
-	  g harvested_pae_covid_anim = 0 if muestra_2 ==1 & yield_4_1000 ==0
-	  replace harvested_pae_covid_anim = 1 if yield_4_56==1 & yield_4_1000 ==0
-
-* g.	Harvested any COVID-19 non-PAE animal product  
-	  g harvested_no_pae_covid_anim = 0 if muestra_2 ==1 & yield_4_1000 ==0
-	  replace harvested_no_pae_covid_anim = 1 if yield_4_56==0 & yield_4_1000 ==0
-
-*===============================================================================
-*Traditional PAE products 
-
-
-* a.	Harvested any traditional PAE agricultural or animal product 
-
-	  g harvested_pae_traditional1 = 0 if muestra_2 ==1 & harvested ==1
-replace harvested_pae_traditional1 = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_13==1 | yield_2_ejote==1 | yield_2_15==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_34==1 | yield_2_35==1 | yield_2_37==1 | yield_2_40_t ==1 | yield_2_46_t==1  | yield_4_53==1 | yield_4_62==1 | yield_4_63==1) & harvested ==1
-	
-* b.	Harvested any traditional non-PAE agricultural or animal product 
-
-	  g harvested_no_pae_traditional = 0 if muestra_2 ==1 & harvested ==1
-replace harvested_no_pae_traditional = 1 if harvested ==1 & harvested_pae_traditional1 ==0
-
-* c.	Harvested any traditional PAE agricultural product  
-
-	 g harvested_pae_traditional_agri = 0  if muestra_2 ==1 & yield_2_1000 ==0
- replace harvested_pae_traditional_agri = 1 if harvested_pae_traditional1==1 & yield_2_1000 ==0
- replace harvested_pae_traditional_agri = 0 if ( yield_4_53==1 | yield_4_62==1 | yield_4_63==1) & yield_2_1000 ==0
-
-* d.	Harvested any traditional non-PAE agricultural product  
-	g harvested_no_pae_tradi_agri = 0 if muestra_2 ==1 & yield_2_1000 ==0
-replace harvested_no_pae_tradi_agri = 1 if harvested_pae_traditional_agri==0 & yield_2_1000 ==0
-
-* e.	Harvested any traditional PAE animal product  
-		g harvested_pae_traditional_anim = 0 if muestra_2 ==1 & yield_4_1000 ==0
-replace harvested_pae_traditional_anim = 1 if ( yield_4_53==1 | yield_4_62==1 | yield_4_63==1) & yield_4_1000 ==0
-
-* f.	Harvested any traditional non-PAE animal product  
-		g harvested_no_pae_tradi_anim = 0 if muestra_2 ==1 & yield_4_1000 ==0
-	replace harvested_no_pae_tradi_anim = 1 if (yield_4_53==0 | yield_4_62==0 | yield_4_63==0) & yield_4_1000 ==0	  
-	  
-  
 	  
 ******* Module H6 - PAE *************************
 
@@ -1016,90 +946,6 @@ foreach variable of local variables{
 replace `variable' =0 if `variable'==2	
 replace `variable' =. if `variable'==3
 }
-
-
-*==================================================================
-*		  Outcomes de analisis
-*==================================================================
-
-*a. Know about PAE market 
-
-	label var infor_2 "Knows about PAE market"
-
-* Knows through MAGA or Videos&SMS 
-
-	        g maga_sms = 0 if infor_2 ==1
-	  replace maga_sms = 1 if infor_3_1==1 | infor_3_5 ==1
-	label var maga_sms "Knows through MAGA or Videos&SMS"
-
-* Knows through MAGA 
-
-	label var infor_3_1 "MAGA"
-
-* Knows through Videos&SMS 
-
-	label var infor_3_5 "Videos&SMS"
-
-* Knows through other sources: MINEDUC campaign, another farmer, school/teacher/OPF, friends/relatives/neighbors/others. 
-
-			g other_sources = 0 if infor_2 ==1
-	  replace other_sources = 1 if (infor_3_1==0 | infor_3_5 ==0) & infor_2 ==1
-	label var other_sources "Other sources"
- 
-* Household registered to sell crops to the SFP
-   label var infor_4 "HH registered to sell crops to the SFP"
-
-* If not registered 
-
-* Knows SFP can buy products (5a) 
-
-	label var infor_5a "Knows SFP can buy products"
-
-* Knows that can register as SFP (5b) 
-
-	label var infor_5b "Knows that can register as SFP"
-
-* Knows the steps to register (5c, but input 5c = 0 if 5b!=yes, to get rid of the 0s) 
-
-	  g steps = infor_5c
-replace steps = 0 if infor_5b==0
-label var steps "Knows the steps to register"
-
-*Interested in registering (6, but replace 6 = 0 if 5a!=yes and 5b!=yes) 
-
-	  g registro = infor_6
-replace registro = 0 if infor_5b==1 |  infor_5a==1 | infor_6==2 | infor_6==-8
-label var registro "Interested in registering"
-
-*Sold crops a registered SFP provider (9)? (me parece que esta debería ser incondicional a las otras preguntas?) 
-
-label var infor_9 "Sold crops to a registered SFP provider"
- 
-*Plans to speak to a registered SFP provider (12, but replace answer as in 6) 
-
- g plan = infor_12
-  replace plan = 0 if infor_5b==1 | infor_5a==1 
-label var plan "Plans to speak to a registered SFP provider"
- 
-* Contact information from a provider 13
-
-label var infor_13 "HH have a provider's contact information"
-
-* Knows the type of crops buy for the PAE 14
-
-label var infor_14 "Knows about the crops that the schools buy from the SFP"
-
-* 15 have spoken with a specialist from MAGA
-
-label var infor_15 "Has spoken with a specialist from MAGA"
-
-* 17 Knows SFP product quality standards (=1 if 17a==2&17b==1) 
-
- g quality = infor_17a==0 | infor_17b==1
-replace quality =. if infor_17b==.
-
-
-
 
 
 
@@ -1134,5 +980,9 @@ tab life_cond_2a, gen(life_cond_2a_)
 gen complete_controls = 1 
 replace complete_controls = 0 if muestra_3 ==1
 
+* creating reg outcomes 
 
- save "$data\digitagro_clean.dta", replace
+
+
+
+ save "$data_el\digitagro_clean.dta", replace
