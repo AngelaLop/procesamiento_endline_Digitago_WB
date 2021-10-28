@@ -1,5 +1,5 @@
 
- * Paper style tables estimation 
+ * Paper style tables estimation  
 global dos "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\Git_repositories\2. Digitago_endline"
     
 cd "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO\07 Endline\07 3 Docs\Digitagro - regs"
@@ -92,15 +92,20 @@ global controlsh n_chidren n_members adult_men adult_women head_self head_parnte
 *1.	Know about PAE market
 *2.	If knows 
 * a.  Knows through MAGA or Videos&SMS
- *a.i.	Knows through MAGA 
+ *a.i.	Knows through MAGA
  
+ local efectos  register no_register total
+ 
+ 
+ foreach efecto of local efectos {
+ local iff "if complete_controls==1 & `efecto'==1"
   local module PAE
   
-  		reg  infor_2 treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, replace ctitle(infor_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+  		reg  infor_2 treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(infor_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg infor_2 treatment_el_1 $controlsh know_pae_bl  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(infor_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg infor_2 treatment_el_1 $controlsh know_pae_bl  i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(infor_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
   
   
   
@@ -110,21 +115,21 @@ global controlsh n_chidren n_members adult_men adult_women head_self head_parnte
 		
 		if "`outcome'"=="maga_sms" | "`outcome'"=="infor_3_1" 	local outcome_bl maga_pae_bl
 		
-		reg  `outcome' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		reg  `outcome' treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 	   
    }
    
  *a.ii. Knows through Videos&SMS
    
-    reg  infor_3_5 treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(infor_3_5) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+    reg  infor_3_5 treatment_el_1 i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(infor_3_5) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
    
-   reg infor_3_5 treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village)  
-   outreg2 using Reg_`module'.xlm, append ctitle(infor_3_5) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab  
+   reg infor_3_5 treatment_el_1 $controlsh i.stratum `iff', vce(cluster village)  
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(infor_3_5) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab  
    
  * b.	Knows through other sources: MINEDUC campaign, another farmer, school/teacher/OPF, friends/relatives/neighbors/others. 
   *3. Is the household registered to sell crops to the SFP?  
@@ -137,11 +142,11 @@ global controlsh n_chidren n_members adult_men adult_women head_self head_parnte
 		if "`outcome'"=="infor_3_4" 		local outcome_bl school_opf_bl
 		if "`outcome'"=="register"			local outcome_bl regist_HH_bl	
 		
-		reg  `outcome' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		cap reg  `outcome' treatment_el_1 i.stratum `iff', vce(cluster village) 
+	  cap  outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   cap reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum `iff', vce(cluster village)  
+	   cap outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 	   
    }
    
@@ -153,11 +158,11 @@ global controlsh n_chidren n_members adult_men adult_women head_self head_parnte
 local outcomes know_sfp_buy know_sfp_register steps easy_register
 	foreach outcome of local outcomes {
 
-   reg `outcome' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+   cap reg `outcome' treatment_el_1 i.stratum `iff', vce(cluster village) 
+   cap outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
    
-   reg `outcome' treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village)  
-   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab   
+   cap reg `outcome' treatment_el_1 $controlsh i.stratum `iff', vce(cluster village)  
+   cap outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab   
  }  
    
  *  5.	Interested in registering (6, but replace 6 = 0 if 5a!=yes and 5b!=yes)
@@ -174,11 +179,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 		if `outcome'== infor_9	local outcome_bl sold_pae_prov_bl	
 		if `outcome'== plan 		local outcome_bl talked_pae_prov_bl
 		
-		reg  `outcome' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		cap reg  `outcome' treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   cap outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   cap reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum `iff', vce(cluster village)  
+	   cap outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 	   
    } 
    
@@ -188,11 +193,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
    local outcomes infor_13 infor_14 infor_15 quality quality_1 quality_2
 	 foreach outcome of local outcomes {
 		
-	   reg `outcome' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+	   cap reg `outcome' treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   cap outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg `outcome' treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab  
+	   cap reg `outcome' treatment_el_1 $controlsh i.stratum `iff', vce(cluster village)  
+	   cap outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab  
 	}		
 
 	      
@@ -202,18 +207,18 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 	  local module agri_pract
 	  
 * 1.	Stores harvest in dry and clean places	
-   reg mark_2_1 treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, replace ctitle(mark_2_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+   reg mark_2_1 treatment_el_1 i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(mark_2_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
    
-   reg mark_2_1 treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(mark_2_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab
+   reg mark_2_1 treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(mark_2_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab
    
 * 2.	Correct material used to pack eggs 
-	reg correct_material_eggs treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(correct_material_eggs) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab
+	reg correct_material_eggs treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(correct_material_eggs) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab
    
-   reg correct_material_eggs treatment_el_1 $controlsh i.stratum if complete_controls==1, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(correct_material_eggs) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab
+   reg correct_material_eggs treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(correct_material_eggs) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab
 	 
 	
 *===============================================================================
@@ -224,11 +229,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 *3.	Trust in SAT 
   local module perception
   
-  		reg  inst_2a_2 treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, replace ctitle(inst_2a_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+  		reg  inst_2a_2 treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(inst_2a_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg inst_2a_2 treatment_el_1 $controlsh trust_MAGA_bl  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(inst_2a_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg inst_2a_2 treatment_el_1 $controlsh trust_MAGA_bl  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(inst_2a_2) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
   
   
   local outcomes inst_2b_2 inst_2c_2
@@ -238,11 +243,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 		if "`outcome'"=="inst_2b_2"		local outcome_bl trust_MINEDUC_bl
 		if "`outcome'"=="inst_2c_2"		local outcome_bl trust_SAT_bl
 		
-		reg  `outcome' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		reg  `outcome' treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 	   
    }  
 
@@ -253,18 +258,18 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
   
   local module marketing
 	
-		reg  taxin treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, replace ctitle(taxin) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		reg  taxin treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(taxin) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg taxin treatment_el_1 $controlsh nit_bl  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(taxin) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg taxin treatment_el_1 $controlsh nit_bl  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(taxin) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 		
 		
-		reg  invoice treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(invoice) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		reg  invoice treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(invoice) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg invoice treatment_el_1 $controlsh inv_bl  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(invoice) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg invoice treatment_el_1 $controlsh inv_bl  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(invoice) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 	   
 
 
@@ -276,11 +281,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 
 *** Covid PAE products  
   
-   reg sale treatment_el_1 i.stratum, vce(cluster village)
-   outreg2 using Reg_`module'.xlm, replace ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+   reg sale treatment_el_1 i.stratum `iff', vce(cluster village)
+   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
    
-   reg sale treatment_el_1 $controlsh i.stratum, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons 
+   reg sale treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons 
       
 * with outcome bl control
 	
@@ -290,11 +295,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 			if "`outcome'"=="sale_pae_covid1"	 | "`outcome'"=="sale_pae_covid_agri"		 local outcome_bl pae_covid_sold_bl
 			if "`outcome'"=="sale_no_pae_covid"  | "`outcome'"=="sale_no_pae_covid_agri"  	 local outcome_bl no_pae_covid_sold_bl
 			
-		reg `outcome' treatment_el_1  i.stratum, vce(cluster village)
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome' treatment_el_1  i.stratum `iff', vce(cluster village)
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 		
-		reg `outcome'  treatment_el_1 $controlsh `outcome_bl' i.stratum, vce(cluster village) 
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome'  treatment_el_1 $controlsh `outcome_bl' i.stratum `iff', vce(cluster village) 
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab nonotes 
 	
 	}
 	
@@ -304,11 +309,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
    local outcomes sale_pae_covid_anim sale_no_pae_covid_anim
 	 foreach outcome of local outcomes {
 
-		reg `outcome' treatment_el_1 i.stratum, vce(cluster village)
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome' treatment_el_1 i.stratum `iff', vce(cluster village)
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 		
-		reg `outcome'  treatment_el_1 $controlsh i.stratum, vce(cluster village) 
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome'  treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 	
 	}	
 
@@ -316,11 +321,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
   
 	local module sales2
 	
-    reg sale treatment_el_1 i.stratum, vce(cluster village)
-   outreg2 using Reg_`module'.xlm, replace ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+    reg sale treatment_el_1 i.stratum `iff', vce(cluster village)
+   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
    
-   reg sale treatment_el_1 $controlsh i.stratum, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons 
+   reg sale treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons 
    
       local outcomes sale_pae_traditional1 sale_no_pae_traditional sale_pae_traditional_agri sale_no_pae_tradi_agri
 	 foreach outcome of local outcomes {
@@ -328,22 +333,22 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 			if "`outcome'"=="sale_pae_traditional1" 	|	"`outcome'"=="sale_pae_traditional_agri"	local outcome_bl pae_traditional_sold_bl
 			if "`outcome'"=="sale_no_pae_traditional"	|	"`outcome'"=="sale_no_pae_tradi_agri"		local outcome_bl no_pae_traditional_sold_bl			
 			
-		reg `outcome' treatment_el_1  i.stratum, vce(cluster village)
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome' treatment_el_1  i.stratum `iff', vce(cluster village)
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 		
-		reg `outcome'  treatment_el_1 $controlsh `outcome_bl' i.stratum, vce(cluster village) 
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome'  treatment_el_1 $controlsh `outcome_bl' i.stratum `iff', vce(cluster village) 
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab nonotes 
 	
 	}	
       
    local outcomes sale_pae_traditional_anim sale_no_pae_tradi_anim 
 	 foreach outcome of local outcomes {
 
-		reg `outcome' treatment_el_1 i.stratum, vce(cluster village)
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome' treatment_el_1 i.stratum `iff', vce(cluster village)
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 		
-		reg `outcome'  treatment_el_1 $controlsh i.stratum, vce(cluster village) 
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome'  treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 	
 	}
 
@@ -351,11 +356,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 
 	local module sales2b
 	
-    reg sale_pae_traditional_agri treatment_el_1 i.stratum, vce(cluster village)
-   outreg2 using Reg_`module'.xlm, replace ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+    reg sale_pae_traditional_agri treatment_el_1 i.stratum `iff', vce(cluster village)
+   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
    
-   reg sale_pae_traditional_agri treatment_el_1 $controlsh pae_traditional_sold_bl i.stratum, vce(cluster village) 
-   outreg2 using Reg_`module'.xlm, append ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons 
+   reg sale_pae_traditional_agri treatment_el_1 $controlsh pae_traditional_sold_bl i.stratum `iff', vce(cluster village) 
+   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(Any agricultural-animal product) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons 
    
       local outcomes sale_maiz_pae sale_zanahoria_pae sale_frijol_pae sale_papa_pae sale_other_pae_agri
 	 foreach outcome of local outcomes {
@@ -366,22 +371,22 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 			if "`outcome'"=="sale_frijol_pae"	  local outcome_bl sold_bl_frijol
 			if "`outcome'"=="sale_other_pae_agri" local outcome_bl sold_bl_otros
 			
-		reg `outcome' treatment_el_1  i.stratum, vce(cluster village)
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome' treatment_el_1  i.stratum `iff', vce(cluster village)
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 		
-		reg `outcome'  treatment_el_1 $controlsh `outcome_bl' i.stratum, vce(cluster village) 
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome'  treatment_el_1 $controlsh `outcome_bl' i.stratum `iff', vce(cluster village) 
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab nonotes 
 	
 	}	
       
    local outcomes sale_pae_traditional_anim  sale_huevo_pae sale_vaca_pae sale_pollo_pae sale_queso_pae
 	 foreach outcome of local outcomes {
 
-		reg `outcome' treatment_el_1 i.stratum, vce(cluster village)
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome' treatment_el_1 i.stratum `iff', vce(cluster village)
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 		
-		reg `outcome'  treatment_el_1 $controlsh i.stratum, vce(cluster village) 
-		outreg2 using Reg_`module'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
+		reg `outcome'  treatment_el_1 $controlsh i.stratum `iff', vce(cluster village) 
+		outreg2 using Reg_`module'`efecto'.xlm, append stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes 
 	
 	} 
 
@@ -391,11 +396,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 	
 	local module sales3
 	
-	reg  no_pae_provider treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	outreg2 using Reg_`module'.xlm, replace ctitle(pae_provider) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+	reg  no_pae_provider treatment_el_1 i.stratum `iff', vce(cluster village) 
+	outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(pae_provider) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	
-  	reg no_pae_provider treatment_el_1 $controlsh no_pae_provider_bl  i.stratum if complete_controls==1, vce(cluster village)  
-	outreg2 using Reg_`module'.xlm, append ctitle(pae_provider) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+  	reg no_pae_provider treatment_el_1 $controlsh no_pae_provider_bl  i.stratum `iff', vce(cluster village)  
+	outreg2 using Reg_`module'`efecto'.xlm, append ctitle(pae_provider) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
   
   
   local outcomes association pae_provider school merchant person square sold_others	
@@ -410,11 +415,11 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 		if "`outcome'"=="square"		local outcome_bl square_bl
 		if "`outcome'"=="sold_others"	local outcome_bl sold_school_bl
 		
-		reg  `outcome' treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		reg  `outcome' treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg `outcome' treatment_el_1 $controlsh `outcome_bl'  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(`outcome') stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 	   
    }  
   	
@@ -422,22 +427,22 @@ local outcomes know_sfp_buy know_sfp_register steps easy_register
 *  SALES - DECISION MAKING
 *===============================================================================	
 
-	  local module sales4
+	  local module sales4  
 	
-		reg  comm_6a_1 treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, replace ctitle(comm_6a_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		reg  desition_agri_1 treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, replace ctitle(comm_6a_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg comm_6a_1 treatment_el_1 $controlsh wom_dec_bl  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(comm_6a_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
+	   reg desition_agri_1 treatment_el_1 $controlsh wom_dec_bl  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(comm_6a_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, YES) keep(treatment_el_1) nocons lab 
 		
 		
-		reg  comm_6b_1 treatment_el_1 i.stratum if complete_controls==1, vce(cluster village) 
-	   outreg2 using Reg_`module'.xlm, append ctitle(comm_6b_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
+		reg  desition_ani_1 treatment_el_1 i.stratum `iff', vce(cluster village) 
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(comm_6b_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, NO, Outcome control at BL, NO) keep(treatment_el_1) nocons lab nonotes addnote(SE clustered by `e(clustvar)',The covariate variables include $controlsh, *p<.05; **p<.01; ***p<.001)
 	   
-	   reg comm_6b_1 treatment_el_1 $controlsh inv_bl  i.stratum if complete_controls==1, vce(cluster village)  
-	   outreg2 using Reg_`module'.xlm, append ctitle(comm_6b_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab 
+	   reg desition_ani_1 treatment_el_1 $controlsh inv_bl  i.stratum `iff', vce(cluster village)  
+	   outreg2 using Reg_`module'`efecto'.xlm, append ctitle(comm_6b_1) stats(coef se pval) addtext(Num clusters, `e(N_clust)', Stratum FE, YES, Controls, YES, Outcome control at BL, NO) keep(treatment_el_1) nocons lab 
    
-   
+  } 
 	
 *==============================================================================	
 * CONTROL OUTCOME means (BY MODULE)
@@ -450,15 +455,16 @@ preserve
 	
 	postfile `ptablas' str25(Module Outcome)  Mean1 using `tablas', replace
 	
-	local iff "if complete_controls==1 & treatment_el_1==0" 
+
+	
 	
 		* harvest1
 				local outcomes harvested harvested_pae_covid1 harvested_no_pae_covid harvested_pae_covid_agri harvested_no_pae_covid_agri harvested_pae_covid_anim harvested_no_pae_covid_anim  
 				
 				foreach outcome of local outcomes{
 					
-						sum `outcome' `iff'
-						local m = `r(mean)'
+						sum `outcome' if complete_controls==1 & treatment_el_1==0
+						local m = `r(mean)' 
 				
 						post `ptablas'  ("Harvest1") ("`outcome'") (`m') 	
 						post `ptablas'  ("Harvest1") ("`outcome'") (`m') 
@@ -469,37 +475,45 @@ preserve
 				
 				foreach outcome of local outcomes{
 					
-						sum `outcome' `iff'
-						local m = `r(mean)'
+						sum `outcome' if complete_controls==1 & treatment_el_1==0
 				
 						post `ptablas'  ("Harvest2") ("`outcome'") (`m') 	
 						post `ptablas'  ("Harvest2") ("`outcome'") (`m') 
 				}		
 		
+		
+		local efectos register no_register total
+		foreach efecto of local efectos {
 		* PAE
-				
+		local ifff "if complete_controls==1 & `efecto'==1 & treatment_el_1==0" 		
 				local outcomes infor_2 maga_sms infor_3_1 infor_3_5 infor_3_4 other_sources infor_4 know_sfp_buy know_sfp_register steps easy_register registro infor_9 plan infor_13 infor_14 infor_15 quality quality_1 quality_2
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					cap sum `outcome' `ifff'
+					if `r(N)' >0 {
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("PAE") ("`outcome'") (`m') 	
-					post `ptablas'  ("PAE") ("`outcome'") (`m') 
+					post `ptablas'  ("PAE_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("PAE_`efecto'") ("`outcome'") (`m') 
+					}
+					if `r(N)' ==0 {
+					post `ptablas'  ("PAE_`efecto'") ("`outcome'") (.) 	
+					post `ptablas'  ("PAE_`efecto'") ("`outcome'") (.) 
+					}
 				}
-				
+			
 		* agro practices 
 				
 				local outcomes mark_2_1 correct_material_eggs
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					cap sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("agri_pract") ("`outcome'") (`m') 	
-					post `ptablas'  ("agri_pract") ("`outcome'") (`m') 
+					post `ptablas'  ("agri_pract_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("agri_pract_`efecto'") ("`outcome'") (`m') 
 				}
 				
 	* perception 
@@ -507,12 +521,12 @@ preserve
 				local outcomes inst_2a_2 inst_2b_2 inst_2c_2
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					cap sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("perception") ("`outcome'") (`m') 	
-					post `ptablas'  ("perception") ("`outcome'") (`m') 
+					post `ptablas'  ("perception_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("perception_`efecto'") ("`outcome'") (`m') 
 				}				
 				
 	* marketing 
@@ -520,12 +534,12 @@ preserve
 				local outcomes taxin invoice
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("marketing") ("`outcome'") (`m') 	
-					post `ptablas'  ("marketing") ("`outcome'") (`m') 
+					post `ptablas'  ("marketing_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("marketing_`efecto'") ("`outcome'") (`m') 
 				}				
 
 		* sales1 
@@ -533,12 +547,12 @@ preserve
 				local outcomes sale sale_pae_covid1 sale_no_pae_covid sale_pae_covid_agri sale_no_pae_covid_agri sale_pae_covid_anim sale_no_pae_covid_anim	
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("sales1") ("`outcome'") (`m') 	
-					post `ptablas'  ("sales1") ("`outcome'") (`m') 
+					post `ptablas'  ("sales1_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("sales1_`efecto'") ("`outcome'") (`m') 
 				}
     
 		* sales2 
@@ -546,12 +560,12 @@ preserve
 				local outcomes sale sale_pae_traditional1 sale_no_pae_traditional sale_pae_traditional_agri sale_no_pae_tradi_agri sale_pae_traditional_anim sale_no_pae_tradi_anim 	
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("sales2") ("`outcome'") (`m') 	
-					post `ptablas'  ("sales2") ("`outcome'") (`m') 
+					post `ptablas'  ("sales2_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("sales2_`efecto'") ("`outcome'") (`m') 
 				}  
 				
 				* sales2b 
@@ -559,12 +573,12 @@ preserve
 				local outcomes sale_pae_traditional_agri sale_maiz_pae sale_zanahoria_pae sale_frijol_pae sale_papa_pae sale_other_pae_agri sale_pae_traditional_anim  sale_huevo_pae sale_vaca_pae sale_pollo_pae sale_queso_pae	
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("sales2") ("`outcome'") (`m') 	
-					post `ptablas'  ("sales2") ("`outcome'") (`m') 
+					post `ptablas'  ("sales2b_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("sales2b_`efecto'") ("`outcome'") (`m') 
 				} 
 				
 		* sales3 
@@ -572,27 +586,27 @@ preserve
 				local outcomes no_pae_provider association pae_provider school merchant person square sold_others	
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("sales3") ("`outcome'") (`m') 	
-					post `ptablas'  ("sales3") ("`outcome'") (`m') 
+					post `ptablas'  ("sales3_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("sales3_`efecto'") ("`outcome'") (`m') 
 				}  		
    		
 		* sales4 
 				
-				local outcomes comm_6a_1 comm_6b_1 	
+				local outcomes desition_agri_1 desition_ani_1	
 				
 				foreach outcome of local outcomes{
-					sum `outcome' `iff'
+					sum `outcome' `ifff'
 					local m = `r(mean)'
 
 								
-					post `ptablas'  ("sales4") ("`outcome'") (`m') 	
-					post `ptablas'  ("sales4") ("`outcome'") (`m') 
-				}			
-	
+					post `ptablas'  ("sales4_`efecto'") ("`outcome'") (`m') 	
+					post `ptablas'  ("sales4_`efecto'") ("`outcome'") (`m') 
+				}		
+	}
 	
 				
 postclose `ptablas'

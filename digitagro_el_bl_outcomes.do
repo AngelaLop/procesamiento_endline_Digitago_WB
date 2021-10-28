@@ -30,31 +30,31 @@ label var harvested "Any agricultural-animal product"
 * b.	Harvested any COVID-19 PAE agricultural or animal product 
 
 	  g harvested_pae_covid1 = 0 if muestra_2 ==1 
-replace harvested_pae_covid1 = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_ejote==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_37==1 | yield_2_yuca | yield_2_40_t ==1 | yield_2_43_t==1 | yield_2_48_t==1 | yield_4_56==1)
+replace harvested_pae_covid1 = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_ejote==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_37==1 | yield_2_yuca | yield_2_40_t ==1 | yield_2_43_t==1 | yield_2_48_t==1 | yield_4_56==1) & muestra_2 ==1 
 
 	
 * c.	Harvested any COVID-19 non-PAE agricultural or animal product 
 
 	  g harvested_no_pae_covid = 0 if muestra_2 ==1 
-replace harvested_no_pae_covid = 1 if (yield_2_1_t==1 | yield_2_13==1 | yield_2_15==1| yield_2_34==1| yield_2_35==1| yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1| yield_2_46_t==1| yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1| yield_4_51==1 | yield_4_52==1 | yield_4_53==1 | yield_4_54==1 | yield_4_55==1 | yield_4_57==1 | yield_4_58==1 | yield_4_59==1 | yield_4_60==1 | yield_4_61==1 | yield_4_62==1 | yield_4_63==1 | yield_4_64==1) 
+replace harvested_no_pae_covid = 1 if (yield_2_1_t==1 | yield_2_13==1 | yield_2_15==1| yield_2_34==1| yield_2_35==1| yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1| yield_2_46_t==1| yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1| yield_4_51==1 | yield_4_52==1 | yield_4_53==1 | yield_4_54==1 | yield_4_55==1 | yield_4_57==1 | yield_4_58==1 | yield_4_59==1 | yield_4_60==1 | yield_4_61==1 | yield_4_62==1 | yield_4_63==1 | yield_4_64==1) & muestra_2 ==1
 
 * d.	Harvested any COVID-19 PAE agricultural product  
 
 	  g harvested_pae_covid_agri = 0  if muestra_2 ==1 
-	  replace harvested_pae_covid_agri = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_ejote==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_37==1 | yield_2_yuca | yield_2_40_t ==1 | yield_2_43_t==1 | yield_2_48_t==1 ) 
+	  replace harvested_pae_covid_agri = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_ejote==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_37==1 | yield_2_yuca | yield_2_40_t ==1 | yield_2_43_t==1 | yield_2_48_t==1 ) & muestra_2 ==1
 	  
 
 * e.	Harvested any COVID-19 non-PAE agricultural product  
 		  g harvested_no_pae_covid_agri = 0 if muestra_2 ==1 
-	replace harvested_no_pae_covid_agri = 1 if (yield_2_1_t==1 | yield_2_13==1 | yield_2_15==1| yield_2_34==1| yield_2_35==1| yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1| yield_2_46_t==1| yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1) 
+	replace harvested_no_pae_covid_agri = 1 if (yield_2_1_t==1 | yield_2_13==1 | yield_2_15==1| yield_2_34==1| yield_2_35==1| yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1| yield_2_46_t==1| yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1) & muestra_2 ==1
 
 * f.	Harvested any COVID-19 PAE animal product  
 	  g harvested_pae_covid_anim = 0 if muestra_2 ==1 
-	  replace harvested_pae_covid_anim = 1 if yield_4_56==1 
+	  replace harvested_pae_covid_anim = 1 if yield_4_56==1 & muestra_2 ==1
 
 * g.	Harvested any COVID-19 non-PAE animal product  
 	  g harvested_no_pae_covid_anim = 0 if muestra_2 ==1 
-	  replace harvested_no_pae_covid_anim = 1 if (yield_4_51==1 | yield_4_52==1 | yield_4_53==1 | yield_4_54==1 | yield_4_55==1 | yield_4_57==1 | yield_4_58==1 | yield_4_59==1 | yield_4_60==1 | yield_4_61==1 | yield_4_62==1 | yield_4_63==1 | yield_4_64==1) 
+	  replace harvested_no_pae_covid_anim = 1 if (yield_4_51==1 | yield_4_52==1 | yield_4_53==1 | yield_4_54==1 | yield_4_55==1 | yield_4_57==1 | yield_4_58==1 | yield_4_59==1 | yield_4_60==1 | yield_4_61==1 | yield_4_62==1 | yield_4_63==1 | yield_4_64==1) & muestra_2 ==1
 
 
 *Traditional PAE products 
@@ -63,29 +63,29 @@ replace harvested_no_pae_covid = 1 if (yield_2_1_t==1 | yield_2_13==1 | yield_2_
 * a.	Harvested any traditional PAE agricultural or animal product 
 
 	  g harvested_pae_traditional1 = 0 if muestra_2 ==1 
-replace harvested_pae_traditional1 = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_13==1 | yield_2_ejote==1 | yield_2_15==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_34==1 | yield_2_35==1 | yield_2_37==1 | yield_2_40_t ==1 | yield_2_46_t==1  | yield_4_53==1 |  yield_4_56==1| yield_4_62==1 | yield_4_63==1) 
+replace harvested_pae_traditional1 = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_13==1 | yield_2_ejote==1 | yield_2_15==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_34==1 | yield_2_35==1 | yield_2_37==1 | yield_2_40_t ==1 | yield_2_46_t==1  | yield_4_53==1 |  yield_4_56==1| yield_4_62==1 | yield_4_63==1) & muestra_2 ==1
 	
 * b.	Harvested any traditional non-PAE agricultural or animal product 
 
 	  g harvested_no_pae_traditional = 0 if muestra_2 ==1 
-replace harvested_no_pae_traditional = 1 if (yield_2_1_t==1 | yield_2_yuca==1 | yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1 | yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1| yield_4_51==1| yield_4_52==1| yield_4_54==1| yield_4_55==1| yield_4_57==1| yield_4_58==1| yield_4_59==1| yield_4_60==1| yield_4_61==1 | yield_4_64==1 ) 
+replace harvested_no_pae_traditional = 1 if (yield_2_1_t==1 | yield_2_yuca==1 | yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1 | yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1| yield_4_51==1| yield_4_52==1| yield_4_54==1| yield_4_55==1| yield_4_57==1| yield_4_58==1| yield_4_59==1| yield_4_60==1| yield_4_61==1 | yield_4_64==1 ) & muestra_2 ==1
 
 * c.	Harvested any traditional PAE agricultural product  
 
 	 g harvested_pae_traditional_agri = 0  if muestra_2 ==1
- replace harvested_pae_traditional_agri = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_13==1 | yield_2_ejote==1 | yield_2_15==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_34==1 | yield_2_35==1 | yield_2_37==1 | yield_2_40_t ==1 | yield_2_46_t==1)
+ replace harvested_pae_traditional_agri = 1 if (yield_2_aguacate ==1 | yield_2_rice ==1 | yield_2_9==1 | yield_2_chile==1 | yield_2_13==1 | yield_2_ejote==1 | yield_2_15==1 | yield_2_16_t==1 | yield_2_guisquil == 1 | yield_2_20 ==1 | yield_2_21_t==1 | yield_2_31==1 | yield_2_34==1 | yield_2_35==1 | yield_2_37==1 | yield_2_40_t ==1 | yield_2_46_t==1) & muestra_2 ==1
 
 * d.	Harvested any traditional non-PAE agricultural product  
 	g harvested_no_pae_tradi_agri = 0 if muestra_2 ==1 
-replace harvested_no_pae_tradi_agri = 1 if (yield_2_1_t==1 | yield_2_yuca==1 | yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1 | yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1) 
+replace harvested_no_pae_tradi_agri = 1 if (yield_2_1_t==1 | yield_2_yuca==1 | yield_2_42_t==1| yield_2_44_t==1| yield_2_45_t==1 | yield_2_47_t==1| yield_2_49_t==1| yield_2_50_t==1) & muestra_2 ==1
 
 * e.	Harvested any traditional PAE animal product  
 			g harvested_pae_traditional_anim = 0 if muestra_2 ==1 
-	replace harvested_pae_traditional_anim = 1 if (yield_4_53==1 | yield_4_56==1| yield_4_62==1 | yield_4_63==1) 
+	replace harvested_pae_traditional_anim = 1 if (yield_4_53==1 | yield_4_56==1| yield_4_62==1 | yield_4_63==1) & muestra_2 ==1
 
 * f.	Harvested any traditional non-PAE animal product  
 		g harvested_no_pae_tradi_anim = 0 if muestra_2 ==1 
-	replace harvested_no_pae_tradi_anim = 1 if (yield_4_51==1 | yield_4_52==1 | yield_4_54==1 | yield_4_55==1 | yield_4_57==1 | yield_4_58==1 | yield_4_59==1 | yield_4_60==1 | yield_4_61==1 | yield_4_64==1) 	
+	replace harvested_no_pae_tradi_anim = 1 if (yield_4_51==1 | yield_4_52==1 | yield_4_54==1 | yield_4_55==1 | yield_4_57==1 | yield_4_58==1 | yield_4_59==1 | yield_4_60==1 | yield_4_61==1 | yield_4_64==1) 	& muestra_2 ==1
 	
 
 *tab1 yield_2_aguacate yield_2_rice yield_2_9 yield_2_chile yield_2_13 yield_2_ejote yield_2_15 yield_2_16_t yield_2_guisquil yield_2_20  yield_2_21_t yield_2_31 yield_2_34 yield_2_35 yield_2_37 yield_2_40_t  yield_2_46_t yield_4_53  yield_4_56 yield_4_62 yield_4_63
@@ -134,6 +134,13 @@ replace harvested_no_pae_tradi_agri = 1 if (yield_2_1_t==1 | yield_2_yuca==1 | y
 	replace register = 0 if (infor_2==1 | infor_2==0) & infor_4 ==.
 	replace register = 1 if infor_4==1 
    label var register "HH registered to sell crops to the SFP"
+   
+   	gen no_register = 0 if register ==1
+	replace no_register = 1 if register==0
+   label var register "HH registered to sell crops to the SFP"
+
+   
+
 
 *4. If not registered 
 
@@ -264,50 +271,77 @@ drop _merge
 *a.	any agricultural (animal) product
 	g sale = 0 if muestra_2==1
 	replace sale =1 if comm_3_1000==0
+	
+
+
 
 *b.	any COVID-19 PAE agricultural or animal product 
 	forvalues prod =1/64 {
 		cap destring comm_4a_`prod'_*, replace
 		cap gen comm_prod_`prod' = comm_4a_`prod'_* ==1 if comm_3_1000==0
 	}
+	
+	forvalues prod =88/99 {
+		cap destring comm_4a_9`prod'_*, replace
+		cap gen comm_prod_9`prod' = comm_4a_9`prod'_* ==1 if comm_3_1000==0
+	}
 
+forvalues vent = 1/8{
+	
 	forvalues prod =1/64 {
-		forvalues vent = 1/8{
+		
 		*cap drop comm_prod_`prod'
 		cap gen comm_prod_`prod' =0 if comm_3_1000==0
 		cap replace comm_prod_`prod' =1 if comm_4a_`prod'_`vent' ==1 & comm_3_1000==0
+		} 
+		
+	forvalues prod =88/99 {
+		
+		*cap drop comm_prod_`prod'
+		cap gen comm_prod_9`prod' =0 if comm_3_1000==0
+		cap replace comm_prod_9`prod' =1 if comm_4a_9`prod'_`vent' ==1 & comm_3_1000==0
 		}
 	}	
+	
+	
+	*a1 any agricultural product 
+
+gen sold_agri = 0 if muestra_2==1
+replace sold_agri=1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_7==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_14==1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_37==1 | comm_prod_39==1 | comm_prod_40 ==1 | comm_prod_43==1 | comm_prod_48==1 | comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1| comm_prod_8==1| comm_prod_13==1| comm_prod_15==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_34==1 | comm_prod_35==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_41==1 | comm_prod_42==1 | comm_prod_44==1 | comm_prod_45==1 | comm_prod_46==1 | comm_prod_47==1 | comm_prod_49==1 | comm_prod_50==1 | comm_prod_988==1 | comm_prod_989==1 | comm_prod_990==1 | comm_prod_997==1 | comm_prod_998==1 | comm_prod_999==1 ) & muestra_2 ==1
+
+*a2 any animal product 
+gen sold_ani = 0 if muestra_2==1
+replace sold_ani=1  if (comm_prod_56==1 | comm_prod_51==1 | comm_prod_52==1 | comm_prod_53==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 | comm_prod_62==1 | comm_prod_63==1 | comm_prod_64==1 | comm_prod_991==1 | comm_prod_992==1 | comm_prod_993==1 | comm_prod_994==1 | comm_prod_995==1 | comm_prod_996==1 ) & muestra_2 ==1
 	  
 	  g sale_pae_covid1 = 0 if muestra_2 ==1 
-replace sale_pae_covid1 = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_7==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_14==1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_37==1 | comm_prod_39==1 | comm_prod_40 ==1 | comm_prod_43==1 | comm_prod_48==1 | comm_prod_56==1) 
+replace sale_pae_covid1 = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_7==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_14==1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_37==1 | comm_prod_39==1 | comm_prod_40 ==1 | comm_prod_43==1 | comm_prod_48==1 | comm_prod_56==1) & muestra_2 ==1
 	label var sale_pae_covid1 "Sold any COVID-19 PAE agricultural or animal product" 
 	
 *c.	any COVID-19 non-PAE agricultural or animal product 
 
 
 	  g sale_no_pae_covid = 0 if muestra_2 ==1 
-replace sale_no_pae_covid = 1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1| comm_prod_8==1| comm_prod_13==1| comm_prod_15==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_34==1 | comm_prod_35==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_41==1 | comm_prod_42==1 | comm_prod_44==1 | comm_prod_45==1 | comm_prod_46==1 | comm_prod_47==1 | comm_prod_49==1 | comm_prod_50==1 | comm_prod_51==1 | comm_prod_52==1 | comm_prod_53==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 | comm_prod_62==1 | comm_prod_63==1 | comm_prod_64==1) 
+replace sale_no_pae_covid = 1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1| comm_prod_8==1| comm_prod_13==1| comm_prod_15==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_34==1 | comm_prod_35==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_41==1 | comm_prod_42==1 | comm_prod_44==1 | comm_prod_45==1 | comm_prod_46==1 | comm_prod_47==1 | comm_prod_49==1 | comm_prod_50==1 | comm_prod_51==1 | comm_prod_52==1 | comm_prod_53==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 | comm_prod_62==1 | comm_prod_63==1 | comm_prod_64==1) & muestra_2 ==1
 	label var sale_no_pae_covid "Sold any COVID-19 non-PAE agricultural or animal product" 
 
 *d.	any COVID-19 PAE agricultural product  
 	  g sale_pae_covid_agri = 0  if muestra_2 ==1 
-	  replace sale_pae_covid_agri = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_7==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_14==1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_37==1 | comm_prod_39==1 | comm_prod_40 ==1 | comm_prod_43==1 | comm_prod_48==1 ) 
+	  replace sale_pae_covid_agri = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_7==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_14==1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_37==1 | comm_prod_39==1 | comm_prod_40 ==1 | comm_prod_43==1 | comm_prod_48==1 ) & muestra_2 ==1
 	   label var sale_pae_covid_agri "Sold any COVID-19 PAE agricultural product"
 
 * e.	any COVID-19 non-PAE agricultural product   
 		  g sale_no_pae_covid_agri = 0 if muestra_2 ==1 
-	replace sale_no_pae_covid_agri = 1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1| comm_prod_8==1| comm_prod_13==1| comm_prod_15==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_34==1 | comm_prod_35==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_41==1 | comm_prod_42==1 | comm_prod_44==1 | comm_prod_45==1 | comm_prod_46==1 | comm_prod_47==1 | comm_prod_49==1 | comm_prod_50==1) 
+	replace sale_no_pae_covid_agri = 1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1| comm_prod_8==1| comm_prod_13==1| comm_prod_15==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_34==1 | comm_prod_35==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_41==1 | comm_prod_42==1 | comm_prod_44==1 | comm_prod_45==1 | comm_prod_46==1 | comm_prod_47==1 | comm_prod_49==1 | comm_prod_50==1) & muestra_2 ==1
 	  label var sale_no_pae_covid_agri "Sold any COVID-19 non-PAE agricultural product"
 
 * f.	sale any COVID-19 PAE animal product  
 			g sale_pae_covid_anim = 0 if muestra_2 ==1 
-	  replace sale_pae_covid_anim = 1 if comm_prod_56==1 
+	  replace sale_pae_covid_anim = 1 if comm_prod_56==1 & muestra_2 ==1
 	  label var sale_pae_covid_anim "Sold any COVID-19 PAE animal product"
 
 * g.	sale any COVID-19 non-PAE animal product  
 	  g sale_no_pae_covid_anim = 0 if muestra_2 ==1 
-	  replace sale_no_pae_covid_anim = 1 if (comm_prod_51==1 | comm_prod_52==1 | comm_prod_53==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 | comm_prod_62==1 | comm_prod_63==1 | comm_prod_64==1) 
+	  replace sale_no_pae_covid_anim = 1 if (comm_prod_51==1 | comm_prod_52==1 | comm_prod_53==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 | comm_prod_62==1 | comm_prod_63==1 | comm_prod_64==1) & muestra_2 ==1
 	 label var sale_no_pae_covid_anim "Sold any COVID-19 non-PAE animal product"
 
 
@@ -317,36 +351,36 @@ replace sale_no_pae_covid = 1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4=
  *b.	any traditional PAE agricultural or animal product 
   
  g sale_pae_traditional1 = 0 if muestra_2 ==1 
-replace sale_pae_traditional1 = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_13==1 | comm_prod_14==1 | comm_prod_15 == 1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_34==1 | comm_prod_35==1  | comm_prod_37==1 | comm_prod_40 ==1 | comm_prod_46==1 |  comm_prod_56==1 | comm_prod_63==1 | comm_prod_62==1 | comm_prod_53==1) 
+replace sale_pae_traditional1 = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_13==1 | comm_prod_14==1 | comm_prod_15 == 1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_34==1 | comm_prod_35==1  | comm_prod_37==1 | comm_prod_40 ==1 | comm_prod_46==1 |  comm_prod_56==1 | comm_prod_63==1 | comm_prod_62==1 | comm_prod_53==1) & muestra_2 ==1
  label var sale_pae_traditional1 "Sold any traditional PAE agricultural or animal product"
 
  *c.	any traditional non-PAE agricultural or animal product
 
  g sale_no_pae_traditional = 0 if muestra_2 ==1 
- replace sale_no_pae_traditional =1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1|  comm_prod_7==1| comm_prod_8==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_39==1 |comm_prod_41==1 | comm_prod_42==1 | comm_prod_43==1 |comm_prod_44==1 | comm_prod_45==1 | comm_prod_47==1 | comm_prod_48==1 |  comm_prod_49==1 | comm_prod_50==1 | comm_prod_51==1 | comm_prod_52==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 |  comm_prod_64==1) 
+ replace sale_no_pae_traditional =1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1|  comm_prod_7==1| comm_prod_8==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_39==1 |comm_prod_41==1 | comm_prod_42==1 | comm_prod_43==1 |comm_prod_44==1 | comm_prod_45==1 | comm_prod_47==1 | comm_prod_48==1 |  comm_prod_49==1 | comm_prod_50==1 | comm_prod_51==1 | comm_prod_52==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 |  comm_prod_64==1) & muestra_2 ==1
  label var sale_no_pae_traditional "Sold any traditional non-PAE agricultural or animal product"
  
  *d.	any traditional PAE agricultural product
  
  g sale_pae_traditional_agri = 0 if muestra_2 ==1 
- replace sale_pae_traditional_agri = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_13==1 | comm_prod_14==1 | comm_prod_15 == 1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_34==1 | comm_prod_35==1  | comm_prod_37==1 | comm_prod_40 ==1 | comm_prod_46==1 ) 
+ replace sale_pae_traditional_agri = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_13==1 | comm_prod_14==1 | comm_prod_15 == 1 | comm_prod_16 == 1 | comm_prod_17 ==1 | comm_prod_20==1 | comm_prod_21==1 | comm_prod_31==1 | comm_prod_34==1 | comm_prod_35==1  | comm_prod_37==1 | comm_prod_40 ==1 | comm_prod_46==1 ) & muestra_2 ==1
  label var sale_pae_traditional_agri "Sold any traditional PAE agricultural product"
  
  *e.	any traditional non-PAE agricultural product
  
  g sale_no_pae_tradi_agri = 0 if muestra_2 ==1 
- replace sale_no_pae_tradi_agri = 1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1|  comm_prod_7==1| comm_prod_8==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_39==1 |comm_prod_41==1 | comm_prod_42==1 | comm_prod_43==1 |comm_prod_44==1 | comm_prod_45==1 | comm_prod_47==1 | comm_prod_48==1 |  comm_prod_49==1 | comm_prod_50==1 ) 
+ replace sale_no_pae_tradi_agri = 1 if (comm_prod_1==1 | comm_prod_3==1 | comm_prod_4==1| comm_prod_6==1|  comm_prod_7==1| comm_prod_8==1| comm_prod_18==1| comm_prod_19==1| comm_prod_22==1| comm_prod_23==1| comm_prod_24==1| comm_prod_25==1 | comm_prod_26==1 | comm_prod_27==1 | comm_prod_28==1 | comm_prod_29==1 | comm_prod_30==1 | comm_prod_32==1 | comm_prod_33==1 | comm_prod_36==1 | comm_prod_38==1 | comm_prod_39==1 |comm_prod_41==1 | comm_prod_42==1 | comm_prod_43==1 |comm_prod_44==1 | comm_prod_45==1 | comm_prod_47==1 | comm_prod_48==1 |  comm_prod_49==1 | comm_prod_50==1 ) & muestra_2 ==1
  label var sale_no_pae_tradi_agri "Sold any traditional non-PAE agricultural product"
  
  *f.	sale any traditional PAE animal product
  
  g sale_pae_traditional_anim = 0 if muestra_2 ==1 
- replace sale_pae_traditional_anim = 1 if ( comm_prod_56==1 | comm_prod_63==1 | comm_prod_62==1 | comm_prod_53==1) 
+ replace sale_pae_traditional_anim = 1 if ( comm_prod_56==1 | comm_prod_63==1 | comm_prod_62==1 | comm_prod_53==1) & muestra_2 ==1
  label var sale_pae_traditional_anim "Sold any traditional PAE animal product"
  
  *g.	sale any traditional non-PAE animal product 
 	g sale_no_pae_tradi_anim = 0 if muestra_2 ==1 
-   replace sale_no_pae_tradi_anim = 1 if (comm_prod_51==1 | comm_prod_52==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 |  comm_prod_64==1) 
+   replace sale_no_pae_tradi_anim = 1 if (comm_prod_51==1 | comm_prod_52==1 | comm_prod_54==1 | comm_prod_55==1 | comm_prod_57==1 | comm_prod_58==1 | comm_prod_59==1 | comm_prod_60==1 | comm_prod_61==1 |  comm_prod_64==1) & muestra_2 ==1
    label var sale_no_pae_tradi_anim "Sold any traditional non-PAE animal product"
   
 ******** Traditional PAE productos - desagregados
@@ -381,8 +415,8 @@ replace sale_pae_traditional1 = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_p
  
  * otros 
 	   g sale_other_pae_agri = 0 if muestra_2==1
- replace sale_other_pae_agri = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_13==1 | comm_prod_14==1 | comm_prod_15 == 1 | comm_prod_17 == 1 | comm_prod_20 ==1 | comm_prod_34==1 | comm_prod_35==1 | comm_prod_37==1 | comm_prod_46==1 ) 
- label var sale_other_pae_trad_agri "other traditional PAE agricultural products"
+ replace sale_other_pae_agri = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_prod_9==1 | comm_prod_10==1 | comm_prod_11==1 | comm_prod_12==1 | comm_prod_13==1 | comm_prod_14==1 | comm_prod_15 == 1 | comm_prod_17 == 1 | comm_prod_20 ==1 | comm_prod_34==1 | comm_prod_35==1 | comm_prod_37==1 | comm_prod_46==1 ) & muestra_2 ==1
+ label var sale_other_pae_agri "other traditional PAE agricultural products"
  
  
  *f.	sale any traditional PAE animal product
@@ -467,17 +501,17 @@ drop _merge
 
 *1.	Selling decision for Ag product done by interviewed women?
 
-label var comm_6a_1 "Selling decision for Agr product done by interviewed women"
+gen desition_agri_1 = comm_6a_1 if sold_agri ==1
+label var desition_agri_1 "Selling decision for Agr product done by interviewed women"
 
 *2.	Selling decision for Animal product done by interviewed women?
 
-label var comm_6b_1 "Selling decision for Animal product done by interviewed women"
+gen desition_ani_1 = comm_6b_1 if sold_ani ==1
+label var desition_ani_1 "Selling decision for Animal product done by interviewed women"
 
 ***************************** BASELINE OUTCOMES ********************************
 drop _merge
   merge 1:1 caseid using "$clean_bl\outcomes_bl", keepusing(wom_dec_bl)
-
-
 
 
  save "$data_el\digitagro_clean_outcomes.dta", replace
