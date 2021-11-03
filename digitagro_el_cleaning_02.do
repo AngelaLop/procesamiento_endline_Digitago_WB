@@ -15,17 +15,21 @@ Output:
 /*==================================================
               0: Program set up
 ==================================================*/
-version 16
+version 17
 drop _all
 *ssc install ietoolkit
 
-global path "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO"
-global data_el 	"${path}\07 Endline\07 01 Data"
-global data_bl 	"${path}\06 Baseline\06 01 Data"
-global clean_el	"${path}\07 Endline\07 4 Clean Data"
-global clean_bl	"${path}\06 Baseline\06 4 Clean Data"
-global output	"${path}\07 Endline\07 3 Docs\Digitagro - balance tables"
-global baseline "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO\06 Baseline\06 4 Clean Data" 
+global path "C:\Users\WB585318\WBG\Javier Romero - GTM - IE DIGITAGRO\Analisis cuantitativo"
+global el	"${path}\07 Endline"
+global bl   "${path}\06 Baseline"
+
+global data_el 	"${el}\07 01 Data"
+global data_bl 	"${bl}\06 01 Data"
+global clean_el	"${el}\07 4 Clean Data"
+global clean_bl	"${bl}\06 4 Clean Data"
+global output_f "${el}\07 3 Docs\Digitagro" 
+global output	"${output_f}\Individual tables"
+
 use "${data_el}/gua_digitagro_el_clean_no_pii.dta", clear
 
 
@@ -68,10 +72,10 @@ replace infor_17a=. if infor_17a==-8
 replace infor_17b=0 if infor_17b==2
 replace infor_17b=. if infor_17b==-8
 
-joinby caseid using "$clean_bl\datos_limpios_controles", unmatched(master) update _merge(pegue)
+joinby caseid using "$clean_bl\datos_limpios", unmatched(master) update _merge(pegue)
 
 save "$data_el/digitagro_clean", replace 
-
+drop _merge
 merge m:m caseid using "$clean_bl\strata.dta"
 keep if muestra_dig ==1
 *** household characteristics
@@ -94,6 +98,10 @@ keep if muestra_dig ==1
 	g e_primaria = inlist(home_12,4,5,6,7)
 	g e_secundaria = inlist(home_12,8)
 	g e_terciaria = inlist(home_12,9,10,11)
+	
+	g menos_primaria = e_ninguno
+	g primaria_mas = e_primaria==1 | e_secundaria==1 | e_terciaria==1
+	
 	
 	* partner 
 	tab home_16, generate(educa_men)
@@ -134,6 +142,9 @@ keep if muestra_dig ==1
 	g terreno_cuerdas_10mas = terreno_cuerdas>10
 	g terreno_cuerdas_miss = terreno_cuerdas ==.
 	
+*** terreno abajo y sobre la media
+	g terreno_bajo_media = terreno_cuerdas < 4
+	g terreno_sobre_mayor_media = terreno_cuerdas >= 4
 	
 	** log terreno_cuerdas
 	g terreno_cuerdas_log =log(terreno_cuerdas)
@@ -982,7 +993,25 @@ replace complete_controls = 0 if muestra_3 ==1
 
 * creating reg outcomes 
 
+* *genaret dummies for climatic area
+gen centro=0
+replace centro=1 if municipality=="SAN MARCOS" | municipality=="ESQUIPULAS PALO GORDO" |municipality=="SAN ANTONIO SACATEPEQUEZ" |municipality=="SAN CRISTOBAL CUCHO" |municipality=="RIO BLANCO" |municipality=="SAN LORENZO"|municipality=="SAN PEDRO SACATEPEQUEZ"
 
+gen altiplano=0
+replace altiplano=1 if municipality=="SAN JOSE OJETENAM"|municipality=="SAN MIGUEL IXTAHUACAN"|municipality=="SIBINAL"|municipality=="SIPACAPA"|municipality=="TACANA"|municipality=="TAJUMULCO"|municipality=="TEJUTLA"|municipality=="COMITANCILLO"|municipality=="CONCEPCION TUTUAPA"|municipality=="IXCHIGUAN"
 
+gen costa=0
+**# Bookmark #1
+replace costa=1 if municipality=="AYUTLA"|municipality=="CATARINA"|municipality=="EL QUETZAL"|municipality=="EL RODEO"|municipality=="EL TUMBADOR"|municipality=="LA BLANCA"|municipality=="SAN RAFAEL PIE DE LA CUESTA"|municipality=="LA REFORMA"|municipality=="MALACATAN"|municipality=="NUEVO PROGRESO"|municipality=="OCOS"|municipality=="PAJAPITA"|municipality=="SAN PABLO"
 
+gen costa_centro=0
+replace costa_centro =1 if costa==1 | centro==1
+
+gen fechas =string(int(starttime), "%tc")
+gen fecha_inicio = substr(fechas,3,3)
+
+gen fecha_ventas = 0 if fecha_inicio =="."
+replace fecha_ventas = 1 if fecha_inicio =="may"
+replace fecha_ventas = 2 if fecha_inicio =="jul"
+replace fecha_ventas = 0 if fecha_ventas ==.
  save "$data_el\digitagro_clean.dta", replace

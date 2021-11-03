@@ -1,12 +1,14 @@
 
-global path "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO"
-global data_el 	"${path}\07 Endline\07 01 Data"
-global data_bl 	"${path}\06 Baseline\06 01 Data"
-global clean_el	"${path}\07 Endline\07 4 Clean Data"
-global clean_bl	"${path}\06 Baseline\06 4 Clean Data"
-global output	"${path}\07 Endline\07 3 Docs\Digitagro - balance tables"
-global baseline "C:\Users\lopez\OneDrive - Universidad de los Andes\WB\GTM - IE DIGITAGRO\06 Baseline\06 4 Clean Data" 
+global path "C:\Users\WB585318\WBG\Javier Romero - GTM - IE DIGITAGRO\Analisis cuantitativo"
+global el	"${path}\07 Endline"
+global bl   "${path}\06 Baseline"
 
+global data_el 	"${el}\07 01 Data"
+global data_bl 	"${bl}\06 01 Data"
+global clean_el	"${el}\07 4 Clean Data"
+global clean_bl	"${bl}\06 4 Clean Data"
+global output_f "${el}\07 3 Docs\Digitagro" 
+global output	"${output_f}\Individual tables"
 
 use "$data_el\digitagro_clean.dta", replace
 
@@ -216,7 +218,8 @@ replace quality_2 =. if infor_17b==.
   drop _merge
   merge 1:1 caseid using "$clean_bl\outcomes_bl", keepusing(know_pae_bl maga_pae_bl school_opf_bl other_sources_bl regist_HH_bl registro_bl sold_pae_prov_bl talked_pae_prov_bl)
   
-  
+   cap g no_regis_bl = 0 if regist_HH_bl == 1
+ replace no_regis_bl = 1 if regist_HH_bl ==0
 *===============================================================================
 *  AGRICULTURAL PRACTICES
 *===============================================================================		
@@ -419,7 +422,7 @@ replace sale_pae_traditional1 = 1 if (comm_prod_2 ==1 | comm_prod_5 ==1 | comm_p
  label var sale_other_pae_agri "other traditional PAE agricultural products"
  
  
- *f.	sale any traditional PAE animal product
+ *f.	sale any traditional PAE animal product 
  
        g sale_huevo_pae = 0 if muestra_2 ==1 
  replace sale_huevo_pae = 1 if comm_prod_56==1 
@@ -509,9 +512,114 @@ label var desition_agri_1 "Selling decision for Agr product done by interviewed 
 gen desition_ani_1 = comm_6b_1 if sold_ani ==1
 label var desition_ani_1 "Selling decision for Animal product done by interviewed women"
 
-***************************** BASELINE OUTCOMES ********************************
 drop _merge
-  merge 1:1 caseid using "$clean_bl\outcomes_bl", keepusing(wom_dec_bl)
+  merge 1:1 caseid using "$clean_bl\outcomes_bl", keepusing(wom_dec_bl) 
+  
+*===============================================================================
+*  SALES - NEW OTCOMES - PRODUCTS, PRICES AND SELLS 
+*===============================================================================
+
+*1.	# of products sold
+
+egen sum_prod = rowtotal(comm_prod_1-comm_prod_999) if muestra_2==1
+label var sum_prod "number of sold products"
+
+*2.	# of (types) of buyers
+
+egen sum_buyers = rowtotal(no_pae_provider association pae_provider school merchant person square sold_others) if muestra_2==1
+label var sum_buyers "number of total buyers"
+
+
+drop _merge
+  merge 1:1 caseid using "$clean_bl\outcomes_bl", keepusing(sum_prod_bl sum_buyers_bl)
 
 
  save "$data_el\digitagro_clean_outcomes.dta", replace
+
+*=====================================================================================================
+
+*3.	Total revenue generated in last sale
+
+* genero precios vent por producto 
+ forvalues buy = 1/8 {
+		forvalues prod =1/64 {
+		cap destring comm_5a_`buy'_`prod', replace
+		
+		cap gen comm_venta_`buy'_`prod' = 0 if comm_3_1000==0
+		cap sum comm_5a_`buy'_`prod'
+		if _rc ==0{
+		replace comm_venta_`buy'_`prod' =1 if comm_5a_`buy'_`prod' !=. & comm_3_1000==0
+		}
+		if _rc !=0 {
+			replace comm_venta_`buy'_`prod' =.			
+		}
+		}
+		forvalues prod =88/99 {
+		
+		*cap drop comm_prod_`prod'
+		cap gen comm_venta_`buy'_9`prod' = 0 if comm_3_1000==0
+		cap sum comm_5a_`buy'_`prod'
+		if _rc ==0{
+		replace comm_venta_`buy'_9`prod' =1 if comm_5a_`buy'_9`prod' !=. & comm_3_1000==0
+		}
+		if _rc !=0 {
+		replace comm_venta_`buy'_9`prod' =.
+		}
+		}
+		}
+ 
+
+/*
+drop comm_venta_* comm_venta_prod_*
+
+	forvalues prod =1/64 {		
+		*cap drop comm_prod_`prod'
+		egen comm_venta_prod_`prod' = rowmean(comm_venta_1_`prod' - comm_venta_8_`prod') if comm_3_1000==0		
+		} 
+		
+	forvalues prod =88/99 {
+		
+		*cap drop comm_prod_`prod'
+		cap gen comm_prod_9`prod' = mean() if comm_3_1000==0
+		cap replace comm_prod_9`prod' =1 if comm_4a_9`prod'_`vent' ==1 & comm_3_1000==0
+		}
+	}	
+*/
+
+/*
+* rashape to have the datasaet at sells level 
+
+reshape long comm_venta_1_ comm_venta_2_ comm_venta_3_ comm_venta_4_ comm_venta_5_ comm_venta_6_ comm_venta_7_ comm_venta_8_ , i(caseid) j(product)
+
+forvalues num =1/8{
+gen comm_venta_`num' = comm_venta_`num'_
+drop comm_venta_`num'_
+}
+
+reshape long comm_venta_ , i(caseid product) j(buyer)
+
+drop if comm_venta_==.
+sort caseid
+
+
+
+
+* genero precios producto - cpmpardo 
+
+ forvalues buy = 1/8 {
+		forvalues prod =1/64 {
+			cap gen precio_venta = .
+			cap replace precio_venta = comm_5a_`buy'_`prod' if buyer == `buy' & product==`prod'
+			
+			cap gen unidad_venta = .
+			cap replace unidad_venta = comm_5b_`buy'_`prod' if buyer == `buy' & product==`prod'
+		}
+ }
+ 
+ g log_precio_venta = ln(precio_venta)
+ 
+ br caseid precio_venta buyer product unidad_venta if precio_venta !=.
+
+  save "$data_el\digitagro_clean_outcomes_ventas_rsh.dta", replace
+***************************** BASELINE OUTCOMES ********************************
+*/
