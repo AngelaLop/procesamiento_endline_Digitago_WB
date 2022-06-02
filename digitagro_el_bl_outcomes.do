@@ -535,7 +535,7 @@ drop _merge
 
 
  save "$data_el\digitagro_clean_outcomes.dta", replace
-
+/*
 *=====================================================================================================
 
 *3.	Total revenue generated in last sale
